@@ -1,10 +1,1363 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>A3Quum Solutions</title>
-</head>
-<body>
-  <h1>A3Quum Solutions</h1>
-  <p>Coming soon.</p>
-</body>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>A3Q | The Operating System for Political Campaigns</title>
+    <meta
+      name="description"
+      content="A3Q is building a unified operating system for political campaigns, replacing fragmented point tools across compliance, field, fundraising, and campaign operations."
+    >
+    <style>
+      :root {
+        --ink: #07101f;
+        --navy: #101f3b;
+        --navy-2: #172c51;
+        --ice: #dcecff;
+        --paper: #f7f9fc;
+        --white: #ffffff;
+        --text: #172234;
+        --muted: #617086;
+        --line: rgba(16, 31, 59, 0.12);
+        --max: 1180px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background: var(--ink);
+        color: var(--text);
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        line-height: 1.5;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .wrap {
+        width: min(var(--max), calc(100% - 40px));
+        margin: 0 auto;
+      }
+
+      .site-header {
+        position: fixed;
+        inset: 0 0 auto;
+        z-index: 20;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(7, 16, 31, 0.58);
+        backdrop-filter: blur(18px);
+      }
+
+      .header-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        min-height: 74px;
+        gap: 24px;
+      }
+
+      .brand img {
+        width: 94px;
+        height: auto;
+        filter: drop-shadow(0 14px 24px rgba(0, 0, 0, 0.25));
+      }
+
+      .topline {
+        color: rgba(255, 255, 255, 0.76);
+        font-size: 0.76rem;
+        font-weight: 850;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .floating-contact {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        z-index: 30;
+        display: flex;
+        width: 56px;
+        height: 56px;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 12px;
+        overflow: hidden;
+        padding: 0 18px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        background: var(--navy);
+        color: var(--white);
+        cursor: pointer;
+        font-family: inherit;
+        box-shadow: 0 18px 44px rgba(7, 16, 31, 0.34);
+        text-decoration: none;
+        transition: width 260ms ease, background 180ms ease, transform 180ms ease;
+      }
+
+      .floating-contact:hover,
+      .floating-contact:focus-visible {
+        width: min(390px, calc(100vw - 48px));
+        background: var(--navy-2);
+        transform: translateY(-2px);
+      }
+
+      .floating-contact span {
+        min-width: 310px;
+        opacity: 0;
+        font-size: 0.88rem;
+        font-weight: 850;
+        white-space: nowrap;
+        transition: opacity 140ms ease 40ms;
+      }
+
+      .floating-contact:hover span,
+      .floating-contact:focus-visible span {
+        opacity: 1;
+      }
+
+      .floating-contact svg {
+        flex: 0 0 20px;
+        width: 20px;
+        height: 20px;
+        stroke-width: 2;
+      }
+
+      .contact-panel {
+        position: fixed;
+        right: 24px;
+        bottom: 92px;
+        z-index: 31;
+        width: min(360px, calc(100vw - 48px));
+        padding: 24px;
+        border: 1px solid rgba(220, 236, 255, 0.22);
+        border-radius: 12px;
+        background: var(--navy);
+        color: var(--white);
+        box-shadow: 0 24px 70px rgba(7, 16, 31, 0.42);
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(12px);
+        transition: opacity 180ms ease, transform 180ms ease;
+      }
+
+      .contact-panel.is-open {
+        opacity: 1;
+        pointer-events: auto;
+        transform: translateY(0);
+      }
+
+      .contact-panel-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .contact-panel h2 {
+        margin-bottom: 8px;
+        color: var(--white);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: 1.55rem;
+        line-height: 1.1;
+      }
+
+      .contact-panel-email {
+        margin-bottom: 20px;
+        color: var(--ice);
+        font-size: 0.95rem;
+        overflow-wrap: anywhere;
+      }
+
+      .contact-panel-close {
+        display: grid;
+        flex: 0 0 34px;
+        width: 34px;
+        height: 34px;
+        place-items: center;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.72);
+        cursor: pointer;
+      }
+
+      .contact-panel-close:hover {
+        color: var(--white);
+      }
+
+      .contact-actions {
+        display: grid;
+        gap: 10px;
+      }
+
+      .contact-action {
+        display: flex;
+        min-height: 46px;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        padding: 0 16px;
+        border: 1px solid var(--ice);
+        border-radius: 999px;
+        background: var(--ice);
+        color: var(--navy);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 0.92rem;
+        font-weight: 850;
+        text-decoration: none;
+      }
+
+      .contact-action-secondary {
+        background: transparent;
+        color: var(--white);
+      }
+
+      .contact-action svg,
+      .contact-panel-close svg {
+        width: 18px;
+        height: 18px;
+        stroke-width: 2;
+      }
+
+      .copy-status {
+        min-height: 1.2em;
+        margin: 10px 0 0;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.8rem;
+        text-align: center;
+      }
+
+      .hero {
+        position: relative;
+        min-height: 88vh;
+        padding: 136px 0 76px;
+        display: grid;
+        align-items: end;
+        overflow: hidden;
+        color: var(--white);
+        background:
+          linear-gradient(90deg, rgba(7, 16, 31, 0.88) 0%, rgba(7, 16, 31, 0.72) 43%, rgba(7, 16, 31, 0.28) 100%),
+          url("assets/campaign-workroom-table-focus.jpg") center / cover no-repeat;
+        background-color: var(--ink);
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(rgba(220, 236, 255, 0.052) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(220, 236, 255, 0.052) 1px, transparent 1px);
+        background-size: 54px 54px;
+        mask-image: linear-gradient(90deg, #000, rgba(0, 0, 0, 0.16));
+        pointer-events: none;
+      }
+
+      .hero-content {
+        position: relative;
+        max-width: 900px;
+      }
+
+      .eyebrow {
+        margin: 0 0 18px;
+        color: var(--ice);
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h1 {
+        max-width: 860px;
+        margin-bottom: 18px;
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3rem, 5.4vw, 5.9rem);
+        line-height: 0.95;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      .subhead {
+        max-width: 720px;
+        margin-bottom: 26px;
+        color: var(--ice);
+        font-size: clamp(1.45rem, 2.5vw, 2.35rem);
+        line-height: 1.12;
+        font-weight: 820;
+      }
+
+      .hero-body {
+        max-width: 760px;
+        margin-bottom: 14px;
+        color: rgba(255, 255, 255, 0.8);
+        font-size: clamp(1.05rem, 1.35vw, 1.22rem);
+      }
+
+      .hero-body:last-child {
+        margin-bottom: 0;
+      }
+
+      section {
+        position: relative;
+        padding: clamp(66px, 9vw, 116px) 0;
+      }
+
+      .dark-section {
+        background:
+          radial-gradient(circle at 14% 0%, rgba(220, 236, 255, 0.14), transparent 30%),
+          linear-gradient(135deg, #081326 0%, #132745 58%, #081326 100%);
+        color: var(--white);
+      }
+
+      .light-section {
+        background: var(--paper);
+      }
+
+      .white-section {
+        background: var(--white);
+      }
+
+      h2 {
+        max-width: 850px;
+        margin-bottom: 22px;
+        color: var(--navy);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.2rem, 4.3vw, 4.6rem);
+        line-height: 1;
+        font-weight: 700;
+        letter-spacing: 0;
+      }
+
+      .dark-section h2,
+      .dark-section h3 {
+        color: var(--white);
+      }
+
+      .pop-line {
+        color: var(--white);
+        font-weight: 900;
+      }
+
+      .section-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.9fr) minmax(320px, 0.55fr);
+        gap: clamp(34px, 6vw, 76px);
+        align-items: center;
+      }
+
+      .section-copy p {
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+
+      .dark-section .section-copy p {
+        color: rgba(255, 255, 255, 0.74);
+      }
+
+      .portrait-card {
+        display: grid;
+        justify-items: center;
+        gap: 18px;
+        margin: 0;
+        align-self: end;
+      }
+
+      .portrait-headshot {
+        display: none;
+      }
+
+      .portrait-cutout {
+        display: block;
+        width: min(420px, 30vw);
+        max-height: 660px;
+        object-fit: contain;
+        object-position: bottom center;
+        filter: drop-shadow(0 32px 60px rgba(0, 0, 0, 0.34));
+      }
+
+      .portrait-card .portrait-headshot {
+        width: min(260px, 72vw);
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid rgba(255, 255, 255, 0.18);
+        box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+      }
+
+      .portrait-card figcaption {
+        color: rgba(255, 255, 255, 0.74);
+        font-size: 0.92rem;
+        font-weight: 780;
+        text-align: center;
+      }
+
+      .market-reality {
+        max-width: 980px;
+      }
+
+      .reality-copy h2 {
+        margin-bottom: 18px;
+      }
+
+      .market-question {
+        display: grid;
+        gap: clamp(28px, 4vw, 46px);
+        margin-top: 30px;
+        margin-bottom: 18px;
+      }
+
+      .market-question-line {
+        display: grid;
+        gap: 8px;
+      }
+
+      .market-question-label {
+        display: block;
+        margin: 0;
+        color: var(--muted);
+        font-family: Inter, Arial, sans-serif;
+        font-size: clamp(0.9rem, 1.1vw, 1.02rem);
+        font-weight: 650;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .market-question-statement {
+        display: block;
+        color: var(--navy);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(2.1rem, 4vw, 4rem);
+        font-weight: 900;
+        line-height: 0.98;
+      }
+
+      .reality-copy p {
+        color: var(--muted);
+        font-size: 1.08rem;
+      }
+
+      .market-cards {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 28px;
+      }
+
+      .market-card {
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--paper);
+      }
+
+      .market-card > strong {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--navy);
+        font-size: 1.02rem;
+      }
+
+      .market-card p {
+        margin: 0;
+        color: var(--muted);
+      }
+
+      .market-card .market-emphasis {
+        display: block;
+        margin-top: 10px;
+        color: var(--navy);
+        font-style: italic;
+        font-weight: inherit;
+      }
+
+      .pillars {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 34px;
+      }
+
+      .what-a3q {
+        overflow: hidden;
+        color: var(--white);
+        background:
+          linear-gradient(90deg, rgba(7, 16, 31, 0.95) 0%, rgba(16, 31, 59, 0.9) 54%, rgba(7, 16, 31, 0.78) 100%),
+          url("assets/canvasser-background.jpg") center / cover no-repeat;
+      }
+
+      .what-a3q h2 {
+        color: var(--white);
+      }
+
+      .what-a3q .section-copy {
+        max-width: 940px;
+      }
+
+      .what-a3q .what-a3q-statement {
+        max-width: 880px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: clamp(1.25rem, 2.1vw, 1.75rem);
+        font-weight: 650;
+        line-height: 1.3;
+      }
+
+      .what-a3q .what-a3q-statement strong {
+        color: var(--white);
+        font-weight: 900;
+      }
+
+      .what-pillars {
+        gap: clamp(28px, 5vw, 68px);
+        margin-top: 46px;
+      }
+
+      .what-pillars .pillar {
+        aspect-ratio: auto;
+        min-height: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        box-shadow: none;
+      }
+
+      .what-pillars .icon {
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        background: transparent;
+        color: var(--ice);
+      }
+
+      .what-pillars .icon svg {
+        width: 38px;
+        height: 38px;
+        stroke-width: 1.7;
+      }
+
+      .what-pillars .pillar h3 {
+        color: var(--white);
+        font-size: 1.02rem;
+      }
+
+      .innovation-block {
+        max-width: 900px;
+        margin-top: 0;
+        padding-bottom: clamp(42px, 6vw, 66px);
+        border-bottom: 1px solid rgba(220, 236, 255, 0.28);
+      }
+
+      .innovation-block + .section-copy {
+        margin-top: clamp(38px, 5vw, 58px);
+      }
+
+      .innovation-intro {
+        max-width: 820px;
+        margin-bottom: 30px;
+      }
+
+      .innovation-title {
+        margin-bottom: 18px;
+        color: var(--ice);
+        font-size: 0.78rem;
+        font-weight: 900;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+      }
+
+      .innovation-list {
+        display: grid;
+        gap: 14px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .innovation-list li {
+        position: relative;
+        padding-left: 28px;
+        color: rgba(255, 255, 255, 0.88);
+        font-size: clamp(1.02rem, 1.5vw, 1.2rem);
+        font-weight: 700;
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      .innovation-list li::before {
+        content: "";
+        position: absolute;
+        top: 0.65em;
+        left: 0;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ice);
+        box-shadow: 0 0 0 7px rgba(220, 236, 255, 0.12);
+      }
+
+      .innovation-list.is-visible li {
+        animation: reveal-up 520ms ease forwards;
+      }
+
+      .innovation-list.is-visible li:nth-child(2) {
+        animation-delay: 110ms;
+      }
+
+      .innovation-list.is-visible li:nth-child(3) {
+        animation-delay: 220ms;
+      }
+
+      .innovation-list.is-visible li:nth-child(4) {
+        animation-delay: 330ms;
+      }
+
+      .pillar {
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-items: center;
+        gap: 14px;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--white);
+        box-shadow: 0 22px 60px rgba(16, 31, 59, 0.08);
+        text-align: center;
+      }
+
+      .icon {
+        display: grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        background: var(--navy);
+        color: var(--ice);
+      }
+
+      .icon svg {
+        width: 25px;
+        height: 25px;
+        stroke-width: 2;
+      }
+
+      .pillar h3 {
+        margin: 0;
+        color: var(--navy);
+        font-size: 1rem;
+      }
+
+      .why-panel {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+        margin-top: 34px;
+      }
+
+      .why-item {
+        padding: 24px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--paper);
+      }
+
+      .why-item strong {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--navy);
+        font-size: 1.02rem;
+      }
+
+      .why-item span {
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .traction-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 0.78fr) minmax(320px, 0.55fr);
+        gap: clamp(28px, 5vw, 62px);
+        align-items: start;
+      }
+
+      blockquote {
+        margin: 0;
+        padding: 26px;
+        border-left: 4px solid var(--ice);
+        border-radius: 0 18px 18px 0;
+        background: rgba(255, 255, 255, 0.08);
+        color: var(--white);
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(1.55rem, 2.6vw, 2.6rem);
+        line-height: 1.12;
+      }
+
+      blockquote cite {
+        display: block;
+        margin-top: 18px;
+        color: rgba(255, 255, 255, 0.66);
+        font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+        font-size: 0.9rem;
+        font-style: normal;
+        font-weight: 760;
+      }
+
+      .team {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-top: 34px;
+      }
+
+      .person {
+        display: grid;
+        grid-template-columns: 92px 1fr;
+        gap: 18px;
+        align-items: center;
+        padding: 18px;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--paper);
+      }
+
+      .person img {
+        width: 92px;
+        height: 92px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--white);
+        box-shadow: 0 12px 30px rgba(16, 31, 59, 0.15);
+      }
+
+      .person h3 {
+        margin-bottom: 6px;
+        color: var(--navy);
+      }
+
+      .person p {
+        margin-bottom: 0;
+        color: var(--muted);
+        font-size: 0.94rem;
+      }
+
+      .close {
+        min-height: 62vh;
+        display: grid;
+        align-items: center;
+        color: var(--white);
+        background:
+          linear-gradient(90deg, rgba(7, 16, 31, 0.98), rgba(7, 16, 31, 0.76)),
+          url("assets/campaign-workroom-table-focus.jpg") center / cover no-repeat;
+      }
+
+      .close-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 26px;
+        align-items: start;
+        justify-items: center;
+        text-align: center;
+      }
+
+      .close h2 {
+        margin-right: auto;
+        margin-left: auto;
+        color: var(--white);
+      }
+
+      .close h2 span {
+        display: block;
+        margin-top: 0.28em;
+      }
+
+      .contact-card {
+        padding: 0;
+        border: 0;
+        background: transparent;
+      }
+
+      .contact-card h3 {
+        margin-bottom: 8px;
+        color: rgba(255, 255, 255, 0.76);
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+      }
+
+      .contact-detail {
+        display: block;
+        padding: 0;
+        border: 0;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.76);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1rem;
+        font-weight: 400;
+        overflow-wrap: anywhere;
+        text-decoration: none;
+      }
+
+      .contact-detail:hover {
+        color: var(--white);
+        text-decoration: underline;
+      }
+
+      .sources {
+        padding: 28px 0;
+        background: #050b15;
+        color: rgba(255, 255, 255, 0.48);
+        font-size: 0.8rem;
+      }
+
+      .sources p {
+        max-width: 980px;
+        margin-bottom: 0;
+      }
+
+      @keyframes reveal-up {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .text-reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 620ms ease var(--reveal-delay, 0ms),
+          transform 620ms ease var(--reveal-delay, 0ms);
+      }
+
+      .text-reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .text-reveal,
+        .innovation-list li {
+          opacity: 1;
+          transform: none;
+          animation: none !important;
+          transition: none;
+        }
+      }
+
+      @media (max-width: 960px) {
+        .section-grid,
+        .traction-panel,
+        .close-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero {
+          min-height: auto;
+          padding-top: 120px;
+          background-position: center;
+          background-size: cover;
+        }
+
+        .pillars,
+        .why-panel,
+        .market-cards,
+        .team {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .what-a3q {
+          background-position: 58% center;
+        }
+
+        .portrait-card {
+          padding: 18px;
+          border-radius: 999px 999px 28px 28px;
+          background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.04));
+        }
+
+        .portrait-cutout {
+          display: none;
+        }
+
+        .portrait-headshot {
+          display: block;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .wrap {
+          width: min(var(--max), calc(100% - 28px));
+        }
+
+        .header-inner {
+          min-height: 66px;
+        }
+
+        .brand img {
+          width: 76px;
+        }
+
+        .topline {
+          max-width: 150px;
+          font-size: 0.66rem;
+          text-align: right;
+        }
+
+        .hero {
+          padding-bottom: 58px;
+        }
+
+        .floating-contact {
+          right: 14px;
+          bottom: 14px;
+        }
+
+        .contact-panel {
+          right: 14px;
+          bottom: 82px;
+          width: calc(100vw - 28px);
+        }
+
+        .floating-contact:hover,
+        .floating-contact:focus-visible {
+          width: calc(100vw - 28px);
+        }
+
+        .pillars,
+        .why-panel,
+        .market-cards,
+        .team {
+          grid-template-columns: 1fr;
+        }
+
+        .pillar {
+          aspect-ratio: auto;
+          min-height: 150px;
+        }
+
+        .what-pillars .pillar {
+          min-height: 0;
+        }
+
+        .what-a3q {
+          background:
+            linear-gradient(rgba(7, 16, 31, 0.92), rgba(7, 16, 31, 0.92)),
+            url("assets/canvasser-background.jpg") 58% center / cover no-repeat;
+        }
+
+        .person {
+          grid-template-columns: 74px 1fr;
+          gap: 14px;
+        }
+
+        .person img {
+          width: 74px;
+          height: 74px;
+        }
+
+      }
+
+    </style>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap header-inner">
+        <a class="brand" href="#top" aria-label="A3Q home">
+          <img src="assets/a3q-logo-white.png" alt="A3Q">
+        </a>
+        <div class="topline">Investor overview</div>
+      </div>
+    </header>
+
+    <button class="floating-contact" type="button" aria-label="Talk to Tom about this opportunity" aria-expanded="false" aria-controls="contact-panel">
+      <span>Talk to Tom about this opportunity</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+        <path d="m22 7-10 6L2 7"></path>
+      </svg>
+    </button>
+
+    <aside class="contact-panel" id="contact-panel" aria-hidden="true" aria-labelledby="contact-panel-title">
+      <div class="contact-panel-header">
+        <div>
+          <h2 id="contact-panel-title">Investor contact</h2>
+          <p class="contact-panel-email">InvestorOpp@A3quumsolutions.com</p>
+        </div>
+        <button class="contact-panel-close" type="button" aria-label="Close contact panel">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" aria-hidden="true">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="contact-actions">
+        <button class="contact-action copy-email" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="14" height="14" x="8" y="8" rx="2"></rect>
+            <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
+          </svg>
+          <span class="copy-label">Copy email address</span>
+        </button>
+        <a class="contact-action contact-action-secondary" href="mailto:InvestorOpp@A3quumsolutions.com?subject=A3Q%20investor%20opportunity">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+            <path d="m22 7-10 6L2 7"></path>
+          </svg>
+          Open email app
+        </a>
+      </div>
+      <p class="copy-status" role="status" aria-live="polite"></p>
+    </aside>
+
+    <main id="top">
+      <section class="hero">
+        <div class="wrap">
+          <div class="hero-content">
+            <p class="eyebrow">Aequum Solutions</p>
+            <h1>A market this size shouldn't still run on spreadsheets.</h1>
+            <p class="subhead">Meet the operating system for political campaigns.</p>
+            <p class="hero-body">There are more than 500,000 elected offices in the United States. 96% are local. Most local campaigns still operate with insufficient tools. They're tracking field operations in Excel, managing compliance filings by hand, and coordinating volunteers over group texts.</p>
+            <p class="hero-body">A3Q is replacing today's patchwork of disconnected tools with one unified platform.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="dark-section">
+        <div class="wrap section-grid">
+          <div class="section-copy">
+            <p class="eyebrow">Origin story</p>
+            <h2>This is what happens when a talented software engineer's mom decides to run for office.</h2>
+            <p>Adil Patel was at AWS when his mother ran for local office. He watched her wrestle with disconnected campaign tools: spreadsheets, group texts, manual compliance filings, clunky canvassing tools, all with no operational visibility and constant fear of missing required filings. <strong class="pop-line">So he built her a better system.</strong></p>
+            <p>Other campaigns saw it and asked to use it. That's when he saw that legacy tools are built for the top 1% of federal races, and even those campaigns are stitching together a dozen disconnected products. Everyone else has nothing. <strong class="pop-line">A3Q is building an answer for all.</strong></p>
+          </div>
+          <figure class="portrait-card">
+            <img class="portrait-cutout" src="assets/adil-casual-cutout.png" alt="Adil Patel" loading="lazy" decoding="async">
+            <img class="portrait-headshot" src="assets/adil-patel.jpg" alt="Adil Patel" loading="lazy" decoding="async">
+            <figcaption>Adil Patel, Chief Technology Officer</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="light-section">
+        <div class="wrap">
+          <div class="market-reality">
+            <div class="reality-copy">
+              <p class="eyebrow">Market reality</p>
+              <h2 class="market-question">
+                <span class="market-question-line">
+                  <span class="market-question-statement">"Ill-fitting tools or fragmented ones?"</span>
+                  <span class="market-question-label">- The Market</span>
+                </span>
+                <span class="market-question-line">
+                  <span class="market-question-statement">"Neither."</span>
+                  <span class="market-question-label">- The Customer</span>
+                </span>
+              </h2>
+              <div class="market-cards">
+                <div class="market-card">
+                  <strong>Local Races</strong>
+                  <p>Repurpose free, ill-fitting tools, like spreadsheets and consumer apps never built for campaign operations. <span class="market-emphasis">No reminders, no flagged issues, nobody knows if something is wrong.</span></p>
+                </div>
+                <div class="market-card">
+                  <strong>Advanced Campaigns</strong>
+                  <p>Can afford to use legacy point solutions, but still need to stitch separate tools together. <span class="market-emphasis">Another login, another export, another copy and paste, and nobody has the full picture.</span></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="what-a3q">
+        <div class="wrap">
+          <div class="innovation-block">
+            <p class="eyebrow">What A3Q is</p>
+            <h2 class="innovation-intro">A3Q is built on modern infrastructure, not bolted onto decades-old systems.</h2>
+            <p class="innovation-title">Innovative Features:</p>
+            <ul class="innovation-list reveal-list">
+              <li>Real-time canvassing maps with live door-knock and turf data</li>
+              <li>Door-knock voice recording and transcription analytics</li>
+              <li>FEC and state compliance tracking, with filing deadlines flagged automatically</li>
+              <li>Donor scoring and outreach prioritization</li>
+            </ul>
+          </div>
+          <div class="section-copy">
+            <p class="what-a3q-statement">Campaigns fail because critical information lives in too many places. <strong>A3Q brings it all together into one unified tool.</strong></p>
+          </div>
+          <div class="pillars what-pillars">
+            <div class="pillar">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3v8Z"></path>
+                  <path d="m9 12 2 2 4-4"></path>
+                </svg>
+              </span>
+              <h3>Compliance</h3>
+            </div>
+            <div class="pillar">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </span>
+              <h3>Field Operations</h3>
+            </div>
+            <div class="pillar">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z"></path>
+                </svg>
+              </span>
+              <h3>Donor &amp; Fundraising</h3>
+            </div>
+            <div class="pillar">
+              <span class="icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"></path>
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.5 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6h.08A1.65 1.65 0 0 0 10 3.09V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c.12.6.64 1.03 1.25 1.05H21a2 2 0 1 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15Z"></path>
+                </svg>
+              </span>
+              <h3>Campaign Operations</h3>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="white-section">
+        <div class="wrap">
+          <div class="section-copy">
+            <p class="eyebrow">Open window</p>
+            <h2>Timing is everything.</h2>
+            <p>The political campaign software market is already worth over a billion dollars and growing close to 10% a year. It still has no dominant operating platform.</p>
+          </div>
+          <div class="why-panel">
+            <div class="why-item">
+              <strong>Scrutiny is rising.</strong>
+              <span>Campaign finance, compliance, and fundraising infrastructure are under a brighter spotlight.</span>
+            </div>
+            <div class="why-item">
+              <strong>Stacks are being chosen now.</strong>
+              <span>The 2026 cycle is live, and campaign technology decisions tend to persist.</span>
+            </div>
+            <div class="why-item">
+              <strong>Integration is expected.</strong>
+              <span>Today's users expect tools to work together.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="dark-section">
+        <div class="wrap traction-panel">
+          <div class="section-copy">
+            <p class="eyebrow">Traction</p>
+            <h2>Traction is early, real, and documented.</h2>
+          </div>
+          <div>
+            <blockquote>
+              "This is everything I've wanted."
+              <cite>- campaign manager using A3Q</cite>
+            </blockquote>
+          </div>
+        </div>
+      </section>
+
+      <section class="white-section">
+        <div class="wrap">
+          <div class="section-copy">
+            <p class="eyebrow">Team</p>
+            <h2>A team that's lived the problem.</h2>
+          </div>
+          <div class="team">
+            <article class="person">
+              <img src="assets/tom-bartels.jpg" alt="Tom Bartels" loading="lazy" decoding="async">
+              <div>
+                <h3>Tom Bartels</h3>
+                <p>President &amp; CEO. Prior GovTech SaaS exit, 23x investor return; veteran operator across software, healthcare, and finance.</p>
+              </div>
+            </article>
+            <article class="person">
+              <img src="assets/adil-patel.jpg" alt="Adil Patel" loading="lazy" decoding="async">
+              <div>
+                <h3>Adil Patel</h3>
+                <p>CTO. Former AWS engineer who built the original A3Q platform; deep expertise in scalable cloud infrastructure.</p>
+              </div>
+            </article>
+            <article class="person">
+              <img src="assets/rashmee-sharif-clean.jpg" alt="Rashmee Sharif" loading="lazy" decoding="async">
+              <div>
+                <h3>Rashmee Sharif</h3>
+                <p>COO. Operations leader across corporate, nonprofit, and political environments; former Senior Project Manager at Cigna.</p>
+              </div>
+            </article>
+            <article class="person">
+              <img src="assets/cecil-bostany-clean.jpg" alt="Cecil Bostany" loading="lazy" decoding="async">
+              <div>
+                <h3>Cecil Bostany</h3>
+                <p>CFO. Veteran CPA with nearly five decades structuring capital raises; former partner at Warren Averett and Ernst &amp; Young.</p>
+              </div>
+            </article>
+            <article class="person">
+              <img src="assets/tony-parker.jpg" alt="Tony Parker" loading="lazy" decoding="async">
+              <div>
+                <h3>Tony Parker</h3>
+                <p>SVP. 40+ years in polling, voter analysis, and redistricting; advised five presidential campaigns.</p>
+              </div>
+            </article>
+            <article class="person">
+              <img src="assets/grant-hallmark.jpg" alt="Grant Hallmark" loading="lazy" decoding="async">
+              <div>
+                <h3>Grant Hallmark</h3>
+                <p>SVP. Co-founded and exited a prior political-tech company; 15+ years advising campaigns at every level.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="close">
+        <div class="wrap close-grid">
+          <div>
+            <p class="eyebrow">Investor conversations</p>
+            <h2>Political campaigns invest to win.<span>You can, too.</span></h2>
+          </div>
+          <div class="contact-card">
+            <h3>Contact:</h3>
+            <button class="contact-detail copy-email" type="button"><span class="copy-label">InvestorOpp@A3quumsolutions.com</span></button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="sources">
+      <div class="wrap">
+        <p>Sources and context: A3Q Investor Presentation, May 2026; U.S. Census of Governments; Business Research Insights / Market Research Future market estimates.</p>
+      </div>
+    </footer>
+    <script>
+      const sectionRevealItems = [
+        ...document.querySelectorAll("main section > .wrap, footer > .wrap")
+      ];
+
+      sectionRevealItems.forEach((item) => item.classList.add("text-reveal"));
+
+      const textObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            textObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: "0px 0px -8% 0px" });
+
+      sectionRevealItems.forEach((item) => textObserver.observe(item));
+
+      const revealLists = document.querySelectorAll(".reveal-list");
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.35 });
+
+      revealLists.forEach((list) => observer.observe(list));
+
+      const investorEmail = "InvestorOpp@A3quumsolutions.com";
+      const contactToggle = document.querySelector(".floating-contact");
+      const contactPanel = document.querySelector(".contact-panel");
+      const contactClose = document.querySelector(".contact-panel-close");
+      const copyStatus = document.querySelector(".copy-status");
+
+      const setContactPanel = (open) => {
+        contactPanel.classList.toggle("is-open", open);
+        contactPanel.setAttribute("aria-hidden", String(!open));
+        contactToggle.setAttribute("aria-expanded", String(open));
+        if (open) contactClose.focus();
+      };
+
+      contactToggle.addEventListener("click", () => {
+        setContactPanel(!contactPanel.classList.contains("is-open"));
+      });
+
+      contactClose.addEventListener("click", () => {
+        setContactPanel(false);
+        contactToggle.focus();
+      });
+
+      document.addEventListener("click", (event) => {
+        if (
+          contactPanel.classList.contains("is-open") &&
+          !contactPanel.contains(event.target) &&
+          !contactToggle.contains(event.target)
+        ) {
+          setContactPanel(false);
+        }
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && contactPanel.classList.contains("is-open")) {
+          setContactPanel(false);
+          contactToggle.focus();
+        }
+      });
+
+      const copyEmail = async () => {
+        try {
+          await navigator.clipboard.writeText(investorEmail);
+        } catch {
+          const helper = document.createElement("textarea");
+          helper.value = investorEmail;
+          helper.setAttribute("readonly", "");
+          helper.style.position = "fixed";
+          helper.style.opacity = "0";
+          document.body.appendChild(helper);
+          helper.select();
+          document.execCommand("copy");
+          helper.remove();
+        }
+      };
+
+      document.querySelectorAll(".copy-email").forEach((button) => {
+        button.addEventListener("click", async () => {
+          await copyEmail();
+          const label = button.querySelector(".copy-label");
+          const original = label.textContent;
+          label.textContent = "Email copied";
+          copyStatus.textContent = "Investor email copied to your clipboard.";
+          window.setTimeout(() => {
+            label.textContent = original;
+            copyStatus.textContent = "";
+          }, 2200);
+        });
+      });
+    </script>
+  </body>
 </html>
