@@ -141,6 +141,8 @@
         bottom: 92px;
         z-index: 31;
         width: min(360px, calc(100vw - 48px));
+        max-height: calc(100dvh - 116px);
+        overflow-y: auto;
         padding: 24px;
         border: 1px solid rgba(220, 236, 255, 0.22);
         border-radius: 12px;
@@ -867,6 +869,19 @@
         }
       }
 
+      @media (hover: none), (pointer: coarse) {
+        .floating-contact,
+        .floating-contact:hover,
+        .floating-contact:focus-visible {
+          width: 56px;
+          transform: none;
+        }
+
+        .floating-contact span {
+          display: none;
+        }
+      }
+
       @media (max-width: 960px) {
         .section-grid,
         .traction-panel,
@@ -939,11 +954,33 @@
           right: 14px;
           bottom: 82px;
           width: calc(100vw - 28px);
+          max-height: calc(100dvh - 104px);
+          padding: 20px;
         }
 
         .floating-contact:hover,
         .floating-contact:focus-visible {
-          width: calc(100vw - 28px);
+          width: 56px;
+          transform: none;
+        }
+
+        .floating-contact span {
+          display: none;
+        }
+
+        .contact-panel h2 {
+          font-size: 1.35rem;
+        }
+
+        .contact-panel-email {
+          font-size: 0.84rem;
+          line-height: 1.35;
+        }
+
+        .contact-action {
+          min-height: 44px;
+          padding: 0 12px;
+          font-size: 0.86rem;
         }
 
         .pillars,
@@ -1206,7 +1243,7 @@
               <img src="assets/adil-patel.jpg" alt="Adil Patel" loading="lazy" decoding="async">
               <div>
                 <h3>Adil Patel</h3>
-                <p>CTO. Former AWS engineer who built the original A3Q platform; deep expertise in scalable cloud infrastructure.</p>
+                <p>CTO. Former AWS engineer who built the A3Q platform; deep expertise in enterprise AI, ML and scalable cloud infrastructure.</p>
               </div>
             </article>
             <article class="person">
@@ -1235,6 +1272,20 @@
               <div>
                 <h3>Grant Hallmark</h3>
                 <p>SVP. Co-founded and exited a prior political-tech company; 15+ years advising campaigns at every level.</p>
+              </div>
+            </article>
+            <article class="person">
+              <img src="assets/alyssa-frost.jpg" alt="Alyssa Frost" loading="lazy" decoding="async">
+              <div>
+                <h3>Alyssa Frost</h3>
+                <p>Sr. Product Engineer. Built backend platform services at Quest Diagnostics; expertise in AI/LLM systems and data pipelines.</p>
+              </div>
+            </article>
+            <article class="person">
+              <img src="assets/steph-bilovsky.jpg" alt="Steph Bilovsky" loading="lazy" decoding="async">
+              <div>
+                <h3>Steph Bilovsky</h3>
+                <p>VP, Marketing. 25+ year marketing leader across B2B SaaS, GovTech, and healthcare; builds 0→1 marketing functions.</p>
               </div>
             </article>
           </div>

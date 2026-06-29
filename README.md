@@ -5,7 +5,7 @@ Static investor landing page for A3Q / Aequum Solutions.
 ## Site Files
 
 - `index.html` - complete single-page website with embedded CSS and JavaScript
-- `assets/` - the ten images used by the page
+- `assets/` - the twelve images used by the page
 - `.nojekyll` - tells GitHub Pages to serve the static files directly
 
 No build process, package installation, server, database, or form backend is required.
