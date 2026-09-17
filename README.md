@@ -22,6 +22,23 @@ committing, not after.
 `CNAME` is what holds the custom domain. Changing or removing it drops the domain and the
 site falls back to the github.io address.
 
+## The ground is dark
+
+Graphite #0D0D0D is the ground on all three pages. Two consequences worth knowing:
+
+**There is one orange.** Orange Deep #C93C0A measures 3.83:1 on graphite and fails, so it
+is absent. A3Q Orange #FF5A1F is 6.23:1 on graphite and passes at any size, which is why a
+dark base needs only one. The `--a3q-orange-deep` token still exists and now resolves to
+#FF5A1F, so nothing downstream breaks.
+
+**There is a new token.** `--a3q-raised: #161616`, the surface for the sections that were
+Light Gray. The palette in 07 has no dark raised surface, so this is a **proposed addition
+to the design system**, not something 07 currently sanctions. 07 Section 04 still names
+light as the default surface and needs amending to match.
+
+The hero is graphite, not orange. Orange is the accent: the rule, the mono line and the
+watermark. The closing invite section is the one full-orange surface on the page.
+
 ## Editing
 
 Colour and type values come from the A3Q Design System (07 in the brand kit) and are

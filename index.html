@@ -42,10 +42,15 @@
    Source of truth is 07_Design_System_A3Q
    ============================================================ */
 :root {
-  --a3q-orange:#FF5A1F; --a3q-orange-deep:#C93C0A; --a3q-graphite:#0D0D0D;
-  --a3q-light-gray:#F2F2F2; --a3q-white:#FFFFFF;
-  --a3q-text-secondary:#6B6B6B; --a3q-text-secondary-dark:#C9C9C9;
-  --a3q-rule:#DFDFDF; --a3q-rule-dark:#2A2A2A;
+  --a3q-orange:#FF5A1F; --a3q-graphite:#0D0D0D; --a3q-white:#FFFFFF;
+  /* Graphite is the ground. Orange Deep is absent on purpose: it measures
+     3.83:1 on graphite and fails, so a dark base carries one orange, which
+     clears 6.23:1 at any size. See 07 Section 04. */
+  --a3q-orange-deep:#FF5A1F;
+  --a3q-light-gray:#F2F2F2;
+  --a3q-raised:#161616;        /* proposed addition to 07: the raised dark surface */
+  --a3q-text-secondary:#C9C9C9; --a3q-text-secondary-dark:#C9C9C9;
+  --a3q-rule:#2A2A2A; --a3q-rule-dark:#2A2A2A;
   --a3q-font:'Plus Jakarta Sans','Trebuchet MS',system-ui,sans-serif;
   --a3q-font-mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
   --gutter:clamp(20px,5vw,72px);
@@ -55,7 +60,7 @@
 *,*::before,*::after { box-sizing:border-box; }
 html { -webkit-text-size-adjust:100%; scroll-behavior:smooth; }
 body {
-  margin:0; overflow-x:clip; background:var(--a3q-white); color:var(--a3q-graphite);
+  margin:0; overflow-x:clip; background:var(--a3q-graphite); color:var(--a3q-white);
   font-family:var(--a3q-font); font-size:16px; line-height:1.65; font-weight:400;
   -webkit-font-smoothing:antialiased;
 }
@@ -81,8 +86,8 @@ p:last-child { margin-bottom:0; }
 /* ---- layout ---- */
 .wrap { max-width:1240px; margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); }
 section { padding:clamp(64px,9vw,112px) 0; }
-.muted { background:var(--a3q-light-gray); }
-.inverse { background:var(--a3q-graphite); color:var(--a3q-white); }
+.muted { background:var(--a3q-raised); }
+.inverse { background:var(--a3q-raised); color:var(--a3q-white); }
 .inverse .eyebrow { color:var(--a3q-orange); }
 .inverse .lede { color:var(--a3q-text-secondary-dark); }
 .lede { color:var(--a3q-text-secondary); }
@@ -90,7 +95,7 @@ section { padding:clamp(64px,9vw,112px) 0; }
 
 /* ---- header ---- */
 header {
-  position:sticky; top:0; z-index:20; background:var(--a3q-white);
+  position:sticky; top:0; z-index:20; background:var(--a3q-graphite);
   border-bottom:1px solid var(--a3q-rule);
 }
 .bar { display:flex; align-items:center; justify-content:space-between; gap:24px; min-height:76px; }
@@ -99,28 +104,29 @@ a.home { display:inline-flex; align-items:center; min-height:44px; }
 nav ul { display:flex; gap:clamp(14px,2.6vw,34px); list-style:none; margin:0; padding:0; }
 nav a {
   display:inline-flex; align-items:center; min-height:44px;
-  font-size:16px; font-weight:600; color:var(--a3q-graphite); text-decoration:none;
+  font-size:16px; font-weight:600; color:var(--a3q-white); text-decoration:none;
 }
-nav a:hover, nav a:focus-visible { color:var(--a3q-orange-deep); }
+nav a:hover, nav a:focus-visible { color:var(--a3q-orange); }
 @media (max-width:700px) { nav { display:none; } }
 
 /* ---- hero ---- */
-.hero { position:relative; background:var(--a3q-orange); color:var(--a3q-white); overflow:hidden; }
+.hero { position:relative; background:var(--a3q-graphite); color:var(--a3q-white);
+  overflow:hidden; border-bottom:1px solid var(--a3q-rule-dark); }
 .hero .wrap { position:relative; z-index:1; }
 .hero .display { max-width:16ch; }
-.hero .subhead { margin-top:30px; max-width:30ch; color:var(--a3q-graphite);
+.hero .subhead { margin-top:30px; max-width:30ch; color:var(--a3q-text-secondary);
   font-size:clamp(20px,2.3vw,26px); line-height:1.30; letter-spacing:-0.4px; }
 /* 07 Section 04, orange surfaces: anything at Subhead or below is Graphite.
    White on orange is 3.12:1 and only clears at 24px, or 19px bold. */
-.hero .rule { width:72px; height:3px; background:var(--a3q-white); border:0; margin:42px 0 24px; }
-.hero .mono-label { color:var(--a3q-graphite); font-size:clamp(14px,1.25vw,17px); letter-spacing:0.08em; }
+.hero .rule { width:72px; height:3px; background:var(--a3q-orange); border:0; margin:42px 0 24px; }
+.hero .mono-label { color:var(--a3q-orange); font-size:clamp(14px,1.25vw,17px); letter-spacing:0.08em; }
 .heromark-wrap {
   position:absolute; right:-17%; bottom:-14%; height:74%;
   pointer-events:none; z-index:0; will-change:transform;
   transform:translate3d(0,var(--py,0px),0);
 }
 .heromark-drift { height:100%; will-change:transform; }
-.heromark { height:100%; width:auto; opacity:0.10; display:block; }
+.heromark { height:100%; width:auto; opacity:0.14; display:block; }
 @media (max-width:820px) { .heromark-wrap { display:none; } }
 
 /* ---- the thesis ---- */
@@ -210,7 +216,8 @@ nav a:hover, nav a:focus-visible { color:var(--a3q-orange-deep); }
 .invite .aside { margin-top:30px; font-size:16px; max-width:44ch; }
 
 /* ---- footer ---- */
-footer { background:var(--a3q-graphite); color:var(--a3q-white); padding:clamp(48px,6vw,72px) 0 40px; }
+footer { background:var(--a3q-graphite); color:var(--a3q-white);
+  border-top:1px solid var(--a3q-rule-dark); padding:clamp(48px,6vw,72px) 0 40px; }
 .foot-top { display:flex; flex-wrap:wrap; gap:32px; justify-content:space-between; align-items:flex-start; }
 footer .logo { height:30px; }
 .foot-meta { color:var(--a3q-text-secondary-dark); font-size:14px; line-height:1.5; }
@@ -296,7 +303,7 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
 
 <header>
   <div class="wrap bar">
-    <a class="home" href="/" aria-label="A3Q home"><svg class="logo" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FF5A1F" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></a>
+    <a class="home" href="/" aria-label="A3Q home"><svg class="logo" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FFFFFF" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></a>
     <nav aria-label="Primary">
       <ul>
         <li><a href="#why">Why we exist</a></li>
@@ -311,7 +318,7 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
 <main id="main">
 
   <section class="hero" id="hero">
-    <div class="heromark-wrap"><div class="heromark-drift"><svg class="heromark" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FFFFFF" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></div></div>
+    <div class="heromark-wrap"><div class="heromark-drift"><svg class="heromark" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FF5A1F" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></div></div>
     <div class="wrap">
       <h1 class="display" data-anim="l">We build software for markets that deserve better.</h1>
       <p class="subhead" data-anim="r" style="--d:.10s">Then we create companies to bring it to the people who need it.</p>

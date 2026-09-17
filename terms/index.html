@@ -42,10 +42,12 @@
    source of truth is 07_Design_System_A3Q.
    ============================================================ */
 :root {
-  --a3q-orange:#FF5A1F; --a3q-orange-deep:#C93C0A; --a3q-graphite:#0D0D0D;
-  --a3q-light-gray:#F2F2F2; --a3q-white:#FFFFFF;
-  --a3q-text-secondary:#6B6B6B; --a3q-text-secondary-dark:#C9C9C9;
-  --a3q-rule:#DFDFDF; --a3q-rule-dark:#2A2A2A;
+  --a3q-orange:#FF5A1F; --a3q-graphite:#0D0D0D; --a3q-white:#FFFFFF;
+  /* One orange on a dark ground: Orange Deep fails at 3.83:1 on graphite. */
+  --a3q-orange-deep:#FF5A1F;
+  --a3q-light-gray:#F2F2F2; --a3q-raised:#161616;
+  --a3q-text-secondary:#C9C9C9; --a3q-text-secondary-dark:#C9C9C9;
+  --a3q-rule:#2A2A2A; --a3q-rule-dark:#2A2A2A;
   --a3q-font:'Plus Jakarta Sans','Trebuchet MS',system-ui,sans-serif;
   --a3q-font-mono:'IBM Plex Mono',ui-monospace,'Courier New',monospace;
   --gutter:clamp(20px,5vw,72px);
@@ -53,7 +55,7 @@
 *,*::before,*::after { box-sizing:border-box; }
 html { -webkit-text-size-adjust:100%; }
 body {
-  margin:0; background:var(--a3q-white); color:var(--a3q-graphite);
+  margin:0; background:var(--a3q-graphite); color:var(--a3q-white);
   font-family:var(--a3q-font); font-size:16px; line-height:1.65; font-weight:400;
   -webkit-font-smoothing:antialiased; overflow-x:clip;
 }
@@ -61,14 +63,14 @@ img,svg { max-width:100%; }
 .wrap { max-width:1240px; margin:0 auto; padding-left:var(--gutter); padding-right:var(--gutter); }
 
 /* ---- header: reduced, no section nav, because there are no sections here ---- */
-header { position:sticky; top:0; z-index:20; background:var(--a3q-white);
+header { position:sticky; top:0; z-index:20; background:var(--a3q-graphite);
   border-bottom:1px solid var(--a3q-rule); }
 .bar { display:flex; align-items:center; justify-content:space-between; gap:24px; min-height:76px; }
 .logo { height:26px; width:auto; display:block; }
 a.home { display:inline-flex; align-items:center; min-height:44px; }
 .hlink { display:inline-flex; align-items:center; min-height:44px;
-  font-size:16px; font-weight:600; color:var(--a3q-graphite); text-decoration:none; }
-.hlink:hover, .hlink:focus-visible { color:var(--a3q-orange-deep); }
+  font-size:16px; font-weight:600; color:var(--a3q-white); text-decoration:none; }
+.hlink:hover, .hlink:focus-visible { color:var(--a3q-orange); }
 
 /* ---- document ---- */
 main { padding:clamp(48px,7vw,86px) 0 clamp(64px,9vw,104px); }
@@ -100,7 +102,7 @@ main strong { font-weight:700; }
 
 /* ---- footer ---- */
 footer { background:var(--a3q-graphite); color:var(--a3q-white);
-  padding:clamp(48px,6vw,72px) 0 40px; }
+  border-top:1px solid var(--a3q-rule-dark); padding:clamp(48px,6vw,72px) 0 40px; }
 .foot-top { display:flex; flex-wrap:wrap; gap:32px; justify-content:space-between;
   align-items:flex-start; }
 footer .logo { height:30px; }
@@ -129,7 +131,7 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
 
 <header>
   <div class="wrap bar">
-    <a class="home" href="/" aria-label="A3Q home"><svg class="logo" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FF5A1F" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></a>
+    <a class="home" href="/" aria-label="A3Q home"><svg class="logo" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FFFFFF" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></a>
     <a class="hlink" href="/">Back to a3quumsolutions.com</a>
   </div>
 </header>
