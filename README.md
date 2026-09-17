@@ -6,6 +6,7 @@ and the favicon is a data URI, so there are no asset paths to break.
     index.html            served at /
     privacy/index.html    served at /privacy
     terms/index.html      served at /terms
+    og-card.png           the social share card, 1200x630
     CNAME                 a3quumsolutions.com — do not edit
     .nojekyll             tells Pages to serve these files as they are
 
@@ -54,6 +55,16 @@ and the readable fallback in the markup, which is what a visitor with JavaScript
 A `data-label` attribute on that span renders a word instead of the address — the homepage
 uses `data-label="Email us"`. Without it the address itself is the link text, which is what
 the legal pages want. Do not replace either with a plain `mailto:` link.
+
+## The share card
+
+`og-card.png`, 1200x630, referenced by absolute URL from all three pages. Rebuild it from
+`build_og.py` in the site source rather than editing the PNG. If the tagline in the page
+title changes, change it here too — they are the same line and a link preview showing the
+old one is the kind of thing nobody notices for months.
+
+LinkedIn caches previews hard. After changing this file, run the URL through LinkedIn's
+Post Inspector to force a refresh, or the old card keeps appearing.
 
 ## Section ids, for measurement
 
