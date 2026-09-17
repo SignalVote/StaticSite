@@ -4,7 +4,7 @@
 <script>document.documentElement.classList.add('js');</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>A3Q</title>
+<title>A3Q | Better Software for Challenging Markets</title>
 <meta name="description" content="Most great companies start with a missing product. A3Q started with an avoided market. We build software for markets that deserve better, then create companies to bring it to the people who need it.">
 <script>
 /* Google Tag Manager. Paste the container ID below (GTM-XXXXXXX) to switch tracking on.
@@ -100,17 +100,19 @@ nav a:hover, nav a:focus-visible { color:var(--a3q-orange-deep); }
 .hero { position:relative; background:var(--a3q-orange); color:var(--a3q-white); overflow:hidden; }
 .hero .wrap { position:relative; z-index:1; }
 .hero .display { max-width:16ch; }
-.hero .subhead { margin-top:26px; max-width:32ch; color:var(--a3q-graphite); }
+.hero .subhead { margin-top:30px; max-width:30ch; color:var(--a3q-graphite);
+  font-size:clamp(20px,2.3vw,26px); line-height:1.30; letter-spacing:-0.4px; }
 /* 07 Section 04, orange surfaces: anything at Subhead or below is Graphite.
    White on orange is 3.12:1 and only clears at 24px, or 19px bold. */
-.hero .rule { width:64px; height:3px; background:var(--a3q-white); border:0; margin:40px 0 22px; }
-.hero .mono-label { color:var(--a3q-graphite); }
+.hero .rule { width:72px; height:3px; background:var(--a3q-white); border:0; margin:42px 0 24px; }
+.hero .mono-label { color:var(--a3q-graphite); font-size:clamp(14px,1.25vw,17px); letter-spacing:0.08em; }
 .heromark-wrap {
   position:absolute; right:-17%; bottom:-14%; height:74%;
   pointer-events:none; z-index:0; will-change:transform;
   transform:translate3d(0,var(--py,0px),0);
 }
-.heromark { height:100%; width:auto; opacity:0.09; display:block; }
+.heromark-drift { height:100%; will-change:transform; }
+.heromark { height:100%; width:auto; opacity:0.10; display:block; }
 @media (max-width:820px) { .heromark-wrap { display:none; } }
 
 /* ---- the thesis ---- */
@@ -266,11 +268,13 @@ a:focus-visible, button:focus-visible { outline:3px solid var(--a3q-orange); out
 
   /* the watermark drifts on its own, and lags the scroll */
   @keyframes a3qdrift {
-    0%   { transform:translate3d(0,0,0) rotate(0deg); }
-    50%  { transform:translate3d(-2.4%,1.8%,0) rotate(-1.8deg); }
-    100% { transform:translate3d(0,0,0) rotate(0deg); }
+    0%   { transform:translate3d(0,0,0) rotate(0deg) scale(1); }
+    25%  { transform:translate3d(-3.2%,1.6%,0) rotate(-2.6deg) scale(1.03); }
+    50%  { transform:translate3d(-1.2%,3.4%,0) rotate(1.6deg) scale(1.05); }
+    75%  { transform:translate3d(-3.8%,0.9%,0) rotate(-1.1deg) scale(1.02); }
+    100% { transform:translate3d(0,0,0) rotate(0deg) scale(1); }
   }
-  .js .heromark { animation:a3qdrift 26s ease-in-out infinite; }
+  .js .heromark-drift { animation:a3qdrift 19s ease-in-out infinite; }
 }
 
 </style>
@@ -299,7 +303,7 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
 <main id="main">
 
   <section class="hero" id="hero">
-    <div class="heromark-wrap"><svg class="heromark" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FFFFFF" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></div>
+    <div class="heromark-wrap"><div class="heromark-drift"><svg class="heromark" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2597.76 847.8"><g fill="#FFFFFF" transform="translate(-11,757.8) scale(1,-1)"><path d="M11 0 263 745H469L721 0H552L502 152H229L179 0ZM272 287H459L345 639H387Z" transform="translate(0,0) scale(1.0)"/><path d="M292 -12Q230 -12 174.0 11.5Q118 35 79.0 78.0Q40 121 27 179L164 225Q181 177 214.0 152.5Q247 128 292 128Q329 128 355.5 142.0Q382 156 397.0 181.5Q412 207 412 241Q412 275 397.5 299.5Q383 324 356.5 337.5Q330 351 292 351Q270 351 248.0 346.0Q226 341 208 332L172 407L363 615H72V745H537V625L341 402L346 465Q413 465 462.5 437.5Q512 410 539.5 361.0Q567 312 567 247Q567 173 531.0 114.0Q495 55 433.0 21.5Q371 -12 292 -12Z" transform="translate(710,0) scale(1.0)"/><path d="M439 -12Q355 -12 283.0 17.0Q211 46 157.5 98.5Q104 151 74.0 221.0Q44 291 44 373Q44 455 73.5 525.0Q103 595 156.5 647.0Q210 699 282.0 728.0Q354 757 439 757Q524 757 596.0 728.0Q668 699 721.5 647.0Q775 595 804.5 525.0Q834 455 834 373Q834 291 804.0 221.0Q774 151 720.5 98.5Q667 46 595.0 17.0Q523 -12 439 -12ZM439 128Q490 128 533.5 146.0Q577 164 610.0 196.5Q643 229 661.0 274.0Q679 319 679 373Q679 427 661.0 471.5Q643 516 610.0 549.0Q577 582 533.5 599.5Q490 617 439 617Q388 617 344.5 599.5Q301 582 268.0 549.0Q235 516 217.0 471.5Q199 427 199 373Q199 319 217.0 274.0Q235 229 268.0 196.5Q301 164 344.5 146.0Q388 128 439 128ZM597 -90 375 298H535L760 -90Z" transform="translate(1300,0) scale(1.0)"/><path d="M189 298V641H82V745H415V641H310V298ZM443 298V745H562L730 536H675L835 745H954V298H834V619L885 609L708 397H690L522 609L564 619V298Z" transform="translate(2189,430) scale(0.44)"/></g></svg></div></div>
     <div class="wrap">
       <h1 class="display" data-anim="l">We build software for markets that deserve better.</h1>
       <p class="subhead" data-anim="r" style="--d:.10s">Then we create companies to bring it to the people who need it.</p>
@@ -407,7 +411,7 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
     <div class="wrap">
       <h2 class="page-title" data-anim="u">Know a market like this?</h2>
       <p class="body-large" data-anim="u" style="--d:.10s">If you work in a market where the software never showed up, tell us about it.</p>
-      <p data-anim="u" style="--d:.20s"><span class="a3qmail">steph [at] a3quumsolutions [dot] com</span></p>
+      <p data-anim="u" style="--d:.20s"><span class="a3qmail" data-label="Email us">InvestorOpp [at] a3quumsolutions [dot] com</span></p>
     </div>
   </section>
 
@@ -433,11 +437,14 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
 (function(){
   /* Address assembled at runtime by design. Do not replace it with a literal
      address; the readable fallback in the markup covers no-JavaScript. */
-  var P = ['steph','a3quumsolutions','com'];
+  var P = ['InvestorOpp','a3quumsolutions','com'];
   var addr = P[0] + String.fromCharCode(64) + P[1] + '.' + P[2];
   var mail = document.querySelectorAll('.a3qmail');
   for (var m=0;m<mail.length;m++) {
-    mail[m].innerHTML = '<a href="mailto:' + addr + '">' + addr + '</a>';
+    /* data-label renders a word instead of the address; without it the
+       address itself is the link text, which is what a legal page needs. */
+    var label = mail[m].getAttribute('data-label') || addr;
+    mail[m].innerHTML = '<a href="mailto:' + addr + '">' + label + '</a>';
   }
 
   var els = document.querySelectorAll('[data-anim]');
@@ -455,6 +462,20 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
   }, { rootMargin: '0px 0px -10% 0px' });
   for (var j=0;j<els.length;j++) io.observe(els[j]);
 
+  /* Anything already on screen at load animates in on the next frame, whatever
+     the observer's bottom margin would say. Without this, on a short viewport
+     an element sitting in the lower tenth of the first screen never intersects
+     and stays invisible until the reader scrolls. */
+  requestAnimationFrame(function(){
+    for (var k=0;k<els.length;k++) {
+      var r = els[k].getBoundingClientRect();
+      if (r.top < window.innerHeight && r.bottom > 0) {
+        els[k].classList.add('in');
+        io.unobserve(els[k]);
+      }
+    }
+  });
+
   var wrap = document.querySelector('.heromark-wrap');
   var still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (wrap && !still) {
@@ -462,7 +483,7 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
     var hero = wrap.parentNode;
     var apply = function(){
       var travel = Math.min(window.scrollY, hero.offsetHeight);
-      wrap.style.setProperty('--py', (travel * 0.16) + 'px');
+      wrap.style.setProperty('--py', (travel * 0.34) + 'px');
       queued = false;
     };
     window.addEventListener('scroll', function(){

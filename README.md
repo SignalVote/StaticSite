@@ -41,17 +41,19 @@ still tracked. GA4 property `G-WLTZVS6ESM` fires through the container.
 
 ## The contact address
 
-`steph@a3quumsolutions.com`, chosen over waiting for a general address. It is **assembled
-by the browser at load time**, so scrapers reading the page source do not find it. To
-change it, edit the `P` array in the script near the bottom of each file:
+`InvestorOpp@a3quumsolutions.com`. It is **assembled by the browser at load time**, so
+scrapers reading the page source do not find it. To change it, edit the `P` array in the
+script near the bottom of each file:
 
-    var P = ['steph','a3quumsolutions','com'];
+    var P = ['InvestorOpp','a3quumsolutions','com'];
 
 and the readable fallback in the markup, which is what a visitor with JavaScript off sees:
 
-    <span class="a3qmail">steph [at] a3quumsolutions [dot] com</span>
+    <span class="a3qmail">InvestorOpp [at] a3quumsolutions [dot] com</span>
 
-Do not replace either with a plain `mailto:` link.
+A `data-label` attribute on that span renders a word instead of the address — the homepage
+uses `data-label="Email us"`. Without it the address itself is the link text, which is what
+the legal pages want. Do not replace either with a plain `mailto:` link.
 
 ## Section ids, for measurement
 

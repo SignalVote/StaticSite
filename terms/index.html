@@ -186,7 +186,7 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
 
     <h2>Questions</h2>
 
-    <p>Write to <span class="a3qmail">steph [at] a3quumsolutions [dot] com</span>.</p>
+    <p>Write to <span class="a3qmail">InvestorOpp [at] a3quumsolutions [dot] com</span>.</p>
 
   </div>
 </main>
@@ -211,11 +211,14 @@ height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Ma
 /* Address assembled at runtime by design. Do not replace it with a literal
    address; the readable fallback in the markup covers no-JavaScript. */
 (function(){
-  var P = ['steph','a3quumsolutions','com'];
+  var P = ['InvestorOpp','a3quumsolutions','com'];
   var addr = P[0] + String.fromCharCode(64) + P[1] + '.' + P[2];
   var mail = document.querySelectorAll('.a3qmail');
   for (var m=0;m<mail.length;m++) {
-    mail[m].innerHTML = '<a href="mailto:' + addr + '">' + addr + '</a>';
+    /* data-label renders a word instead of the address; without it the
+       address itself is the link text, which is what a legal page needs. */
+    var label = mail[m].getAttribute('data-label') || addr;
+    mail[m].innerHTML = '<a href="mailto:' + addr + '">' + label + '</a>';
   }
 })();
 </script>
