@@ -1,0 +1,10 @@
+# a3quumsolutions.com
+# Public marketing site. Crawling is open to search engines and AI crawlers
+# alike; the blanket Allow below covers GPTBot, ClaudeBot, PerplexityBot,
+# Google-Extended, Applebot and the rest without naming them, so a new one
+# does not need a rule added here to get in.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://a3quumsolutions.com/sitemap.xml
