@@ -1,0 +1,19 @@
+# Cloudflare Pages headers for the A3Q digital cards.
+# Contact files must be served as text/vcard so iPhones open them as a contact card
+# instead of downloading them. Explicit paths, one per card.
+/cards/tom.vcf
+  Content-Type: text/vcard; charset=utf-8
+/cards/rashmee.vcf
+  Content-Type: text/vcard; charset=utf-8
+/cards/adil.vcf
+  Content-Type: text/vcard; charset=utf-8
+/cards/cecil.vcf
+  Content-Type: text/vcard; charset=utf-8
+/cards/tony.vcf
+  Content-Type: text/vcard; charset=utf-8
+/cards/grant.vcf
+  Content-Type: text/vcard; charset=utf-8
+/cards/steph.vcf
+  Content-Type: text/vcard; charset=utf-8
+/cards/alyssa.vcf
+  Content-Type: text/vcard; charset=utf-8

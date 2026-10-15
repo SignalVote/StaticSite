@@ -1,0 +1,419 @@
+<!DOCTYPE html><html lang="en"> <head><script>(function(){const tracking = "";
+
+      // A card reached without tracking (a texted link, a typed address) can only have
+      // come from this person's card, so tag it before anything records the visit.
+      if (tracking && location.search.indexOf('utm_source=') === -1) {
+        // Only the keys the link did not already carry. A flyer's utm_content is the
+        // piece that originated the visit, so keep it: appending ours as well would
+        // leave utm_content in the URL twice, and which one any reader picks up is
+        // not something to rely on.
+        var qs = '&' + location.search.slice(1);
+        var add = tracking.split('&').filter(function (p) {
+          return p && qs.indexOf('&' + p.split('=')[0] + '=') === -1;
+        });
+        if (add.length) {
+          location.replace(location.pathname + (location.search ? location.search + '&' : '?') + add.join('&') + location.hash);
+        }
+      }
+    })();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Send your info | A3Q</title><meta name="description" content="Send your details to the A3Q team."><link rel="canonical" href="https://a3quumsolutions.com/capture/"><meta name="robots" content="noindex"><meta name="theme-color" content="#FF5A1F"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta property="og:type" content="website"><meta property="og:site_name" content="A3Q"><meta property="og:title" content="Send your info | A3Q"><meta property="og:description" content="Send your details to the A3Q team."><meta property="og:url" content="https://a3quumsolutions.com/capture/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Send your info | A3Q"><meta name="twitter:description" content="Send your details to the A3Q team."><meta name="theme-color" content="#0D0D0D"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet"><script>window.a3qAttrRules = window.a3qAttrRules || (function () {
+  var NAME = /^[a-z0-9_]+$/;
+  var EVENT = /^ev-[0-9]{4}-[a-z]{4}$/;
+  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta"];
+  function rep(v) { v = String(v || ''); return NAME.test(v) && PLATFORMS.indexOf(v) === -1 ? v : ''; }
+  function piece(v) { v = String(v || ''); return NAME.test(v) ? v : ''; }
+  // Codes are lowercase; a printed EV-2610-PACS still counts.
+  function ev(v) { v = String(v || '').toLowerCase(); return EVENT.test(v) ? v : ''; }
+  function path(r, e) { return e ? 'event' : (r ? 'outbound' : 'inbound'); }
+  // The fields for a page that has only its own query string to go on.
+  function fromSearch(search) {
+    function qp(k) { try { return (new URLSearchParams(search).get(k) || '').trim(); } catch (e) { return ''; } }
+    var r = rep(qp('utm_source')), p = piece(qp('utm_content')), e = ev(qp('utm_campaign'));
+    var out = [];
+    if (r) out.push({ name: 'source_rep', value: r });
+    if (p) out.push({ name: 'source_piece', value: p });
+    if (e) out.push({ name: 'events_attended', value: e });
+    out.push({ name: 'acquisition_path', value: path(r, e) });
+    return out;
+  }
+  return { rep: rep, piece: piece, ev: ev, path: path, fromSearch: fromSearch };
+})();</script><script>/* A3Q form tracking fields. The one source for window.a3qFormFields().
+ *
+ * Loaded on every page of every brand: inline through <FormFields /> on Astro
+ * pages, and as /touch.js on the hand-written static pages. Do not copy it.
+ *
+ * ON EVERY PAGE it stores the visit's first tagged arrival in localStorage
+ * (key a3q_touch), so a visitor who lands on a tagged link and goes on to a
+ * form, in the same tab or a new one, still carries the event, channel and
+ * campaign. First arrival wins, and the set is stored and read as one.
+ *
+ * THE WINDOW IS 30 MINUTES, refreshed by every page view, to match GA4's
+ * session timeout. Thirty minutes with no page view on the site and the stored
+ * touch is discarded on the next read. localStorage rather than sessionStorage
+ * because sessionStorage is not shared with a new tab; the expiry keeps it to
+ * one visit rather than a durable record. Internal links are never given utm_*
+ * parameters: GA4 would read each click as a new campaign arrival.
+ *
+ * ON A FORM PAGE the page calls a3qFormFields(fields) and concats the result:
+ *
+ *   acquisition_event  utm_campaign, lowercased, only if it matches ev-####-xxxx
+ *   source_channel     utm_medium, lowercased, only if it is on CHANNELS
+ *   source_campaign    utm_campaign, lowercased, not validated (conventions v3)
+ *   ga_client_id       the _ga cookie, last two dot-separated parts
+ *   test_record        "true" when the submitted email ends in @example.com
+ *
+ * Where event, channel and campaign come from, in order:
+ *   1. the form page's own URL, if it carries any of them (used as a set);
+ *   2. otherwise the stored first arrival: the event from /attr.js
+ *      (window.vcAttribution, VoteCivic and Veritas) when it has one, else
+ *      a3q_touch, and the channel and campaign from a3q_touch.
+ *
+ * A field with no valid value is left out, never sent blank. source_list is not
+ * sent here: it is set at import.
+ */
+(function () {
+  if (window.a3qFormFields) return;
+  // paid_social is the v3 spelling. paid-social stays so links already printed
+  // or running in ads keep attributing.
+  var CHANNELS = ['qr', 'email', 'social', 'paid_social', 'paid-social', 'cpc', 'display', 'sms', 'referral'];
+  var KEY = 'a3q_touch';
+
+  function qp(k) {
+    try { return (new URLSearchParams(location.search).get(k) || '').trim().toLowerCase(); } catch (e) { return ''; }
+  }
+  function validEv(v) { v = String(v || '').toLowerCase(); return /^ev-[0-9]{4}-[a-z]{4}$/.test(v) ? v : ''; }
+  function validCh(v) { v = String(v || '').toLowerCase(); return CHANNELS.indexOf(v) !== -1 ? v : ''; }
+  // Campaign names are free text by design: passed through lowercased, not
+  // checked against a list.
+  function cleanCp(v) { return String(v || '').trim().toLowerCase(); }
+
+  var fromUrl = { ev: validEv(qp('utm_campaign')), ch: validCh(qp('utm_medium')), cp: cleanCp(qp('utm_campaign')) };
+  var urlTagged = !!(fromUrl.ev || fromUrl.ch || fromUrl.cp);
+
+  var TTL = 30 * 60 * 1000; // GA4's session timeout
+  var EMPTY = { ev: '', ch: '', cp: '' };
+
+  // The stored touch, or null if there is none or it has expired. An expired
+  // one is removed so it cannot be read later.
+  function load() {
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!o) return null;
+      if (!(o.t > 0) || Date.now() - o.t > TTL) { localStorage.removeItem(KEY); return null; }
+      return { ev: validEv(o.ev), ch: validCh(o.ch), cp: cleanCp(o.cp) };
+    } catch (e) { return null; }
+  }
+  function save(b) {
+    try { localStorage.setItem(KEY, JSON.stringify({ ev: b.ev, ch: b.ch, cp: b.cp, t: Date.now() })); } catch (e) {}
+  }
+
+  // Every page view: keep a live touch alive, or record the first tagged
+  // arrival if there is none. A tagged arrival never replaces a live touch.
+  // Storage blocked or private mode: nothing is stored and the form page's own
+  // URL still works.
+  var live = load();
+  if (live) save(live);
+  else if (urlTagged) save(fromUrl);
+
+  function stored() { return load() || EMPTY; }
+
+  function gaClientId() {
+    try {
+      var m = document.cookie.match(/(?:^|;\s*)_ga=([^;]+)/);
+      if (!m) return '';
+      var parts = decodeURIComponent(m[1]).split('.');
+      if (parts.length < 4) return '';
+      var id = parts.slice(-2).join('.');
+      return /^[0-9]+\.[0-9]+$/.test(id) ? id : '';
+    } catch (e) { return ''; }
+  }
+
+  function touch() {
+    if (urlTagged) return fromUrl;
+    var s = stored();
+    var ev = '';
+    try { if (window.vcAttribution) ev = validEv(window.vcAttribution.current().ev); } catch (e) {}
+    return { ev: ev || s.ev, ch: s.ch, cp: s.cp };
+  }
+
+  window.a3qFormFields = function (fields) {
+    var out = [];
+    var t = touch();
+    if (t.ev) out.push({ name: 'acquisition_event', value: t.ev });
+    if (t.ch) out.push({ name: 'source_channel', value: t.ch });
+    if (t.cp) out.push({ name: 'source_campaign', value: t.cp });
+    var cid = gaClientId();
+    if (cid) out.push({ name: 'ga_client_id', value: cid });
+    var email = '';
+    for (var i = 0; fields && i < fields.length; i++) if (fields[i].name === 'email') email = String(fields[i].value || '');
+    if (/@example\.com$/i.test(email.trim())) out.push({ name: 'test_record', value: 'true' });
+    return out;
+  };
+})();
+</script><link rel="stylesheet" href="/_astro/adil.BlA3-QSi.css">
+<style>.cap{margin-top:30px;display:flex;flex-direction:column;gap:16px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field>span{font-family:var(--a3q-mono);font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--a3q-secondary)}.field>span em{font-style:normal;text-transform:none;letter-spacing:0;font-weight:500;opacity:.75}.field input,.field select,.field textarea{font-family:inherit;font-size:16px;color:var(--a3q-white);background:var(--a3q-graphite);border:1px solid var(--a3q-rule);padding:12px;width:100%;min-height:50px;border-radius:0}.field textarea{resize:vertical;min-height:78px}.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--a3q-orange);outline-offset:1px;border-color:var(--a3q-orange)}.hp{position:absolute;left:-9999px}.err{font-size:14px;color:var(--a3q-orange)}.done{margin-top:34px}.done h2{font-size:28px;font-weight:800;line-height:1.1;letter-spacing:-.8px}.done .btn{margin-top:24px}.foot a.link{text-decoration:none}
+</style></head> <body>  <main class="a3q-card"> <article class="panel"> <header class="top"> <img class="logo" src="/cards/a3q-logo.svg" alt="A3Q" width="2598" height="848"> <p class="mono">Send your info</p> </header> <section class="who"> <h1>Send<br><b>your info</b></h1> <p class="title" id="repline">Someone from the A3Q team will follow up.</p> </section> <form class="cap" id="capform" novalidate> <div class="two"> <label class="field"><span>First name</span><input id="f-first" autocomplete="off" required></label> <label class="field"><span>Last name</span><input id="f-last" autocomplete="off" required></label> </div> <label class="field"><span>Email</span><input id="f-email" type="email" inputmode="email" autocomplete="off" required></label> <label class="field"><span>Phone</span><input id="f-phone" type="tel" inputmode="tel" autocomplete="off"></label> <label class="field"><span>Organization</span><input id="f-company" autocomplete="off"></label> <label class="field"> <span>I am a</span> <select id="f-role" required> <option value="" disabled selected>Choose one</option> <option value="candidate">Candidate</option><option value="campaign_staff">Campaign staff</option><option value="consultant">Consultant</option><option value="org_lead">Organization leader</option><option value="vendor">Vendor or partner</option><option value="investor">Investor</option><option value="press">Press</option> </select> </label> <label class="field"><span>Anything we should know <em>optional</em></span><textarea id="f-notes" rows="3"></textarea></label> <label class="hp" aria-hidden="true">Website <input id="f-website" tabindex="-1" autocomplete="off"></label> <p class="err" id="caperr" role="alert" hidden></p> <button class="btn btn-primary" id="f-submit" type="submit">Send</button> <p class="hint">We use this to reply and to follow up about A3Q. Unsubscribe or ask us to delete your information any time.</p> </form> <div class="done" id="done" role="status" hidden> <h2 id="donename">Thanks. We'll be in touch.</h2> <button class="btn btn-ghost" id="again" type="button">Send another</button> </div> <footer class="foot"> <a class="link" href="/" id="backLink">Back to the card</a> </footer> </article> </main>  </body></html>  <script>window.a3qAttrRules = window.a3qAttrRules || (function () {
+  var NAME = /^[a-z0-9_]+$/;
+  var EVENT = /^ev-[0-9]{4}-[a-z]{4}$/;
+  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta"];
+  function rep(v) { v = String(v || ''); return NAME.test(v) && PLATFORMS.indexOf(v) === -1 ? v : ''; }
+  function piece(v) { v = String(v || ''); return NAME.test(v) ? v : ''; }
+  // Codes are lowercase; a printed EV-2610-PACS still counts.
+  function ev(v) { v = String(v || '').toLowerCase(); return EVENT.test(v) ? v : ''; }
+  function path(r, e) { return e ? 'event' : (r ? 'outbound' : 'inbound'); }
+  // The fields for a page that has only its own query string to go on.
+  function fromSearch(search) {
+    function qp(k) { try { return (new URLSearchParams(search).get(k) || '').trim(); } catch (e) { return ''; } }
+    var r = rep(qp('utm_source')), p = piece(qp('utm_content')), e = ev(qp('utm_campaign'));
+    var out = [];
+    if (r) out.push({ name: 'source_rep', value: r });
+    if (p) out.push({ name: 'source_piece', value: p });
+    if (e) out.push({ name: 'events_attended', value: e });
+    out.push({ name: 'acquisition_path', value: path(r, e) });
+    return out;
+  }
+  return { rep: rep, piece: piece, ev: ev, path: path, fromSearch: fromSearch };
+})();</script> <script>/* A3Q form tracking fields. The one source for window.a3qFormFields().
+ *
+ * Loaded on every page of every brand: inline through <FormFields /> on Astro
+ * pages, and as /touch.js on the hand-written static pages. Do not copy it.
+ *
+ * ON EVERY PAGE it stores the visit's first tagged arrival in localStorage
+ * (key a3q_touch), so a visitor who lands on a tagged link and goes on to a
+ * form, in the same tab or a new one, still carries the event, channel and
+ * campaign. First arrival wins, and the set is stored and read as one.
+ *
+ * THE WINDOW IS 30 MINUTES, refreshed by every page view, to match GA4's
+ * session timeout. Thirty minutes with no page view on the site and the stored
+ * touch is discarded on the next read. localStorage rather than sessionStorage
+ * because sessionStorage is not shared with a new tab; the expiry keeps it to
+ * one visit rather than a durable record. Internal links are never given utm_*
+ * parameters: GA4 would read each click as a new campaign arrival.
+ *
+ * ON A FORM PAGE the page calls a3qFormFields(fields) and concats the result:
+ *
+ *   acquisition_event  utm_campaign, lowercased, only if it matches ev-####-xxxx
+ *   source_channel     utm_medium, lowercased, only if it is on CHANNELS
+ *   source_campaign    utm_campaign, lowercased, not validated (conventions v3)
+ *   ga_client_id       the _ga cookie, last two dot-separated parts
+ *   test_record        "true" when the submitted email ends in @example.com
+ *
+ * Where event, channel and campaign come from, in order:
+ *   1. the form page's own URL, if it carries any of them (used as a set);
+ *   2. otherwise the stored first arrival: the event from /attr.js
+ *      (window.vcAttribution, VoteCivic and Veritas) when it has one, else
+ *      a3q_touch, and the channel and campaign from a3q_touch.
+ *
+ * A field with no valid value is left out, never sent blank. source_list is not
+ * sent here: it is set at import.
+ */
+(function () {
+  if (window.a3qFormFields) return;
+  // paid_social is the v3 spelling. paid-social stays so links already printed
+  // or running in ads keep attributing.
+  var CHANNELS = ['qr', 'email', 'social', 'paid_social', 'paid-social', 'cpc', 'display', 'sms', 'referral'];
+  var KEY = 'a3q_touch';
+
+  function qp(k) {
+    try { return (new URLSearchParams(location.search).get(k) || '').trim().toLowerCase(); } catch (e) { return ''; }
+  }
+  function validEv(v) { v = String(v || '').toLowerCase(); return /^ev-[0-9]{4}-[a-z]{4}$/.test(v) ? v : ''; }
+  function validCh(v) { v = String(v || '').toLowerCase(); return CHANNELS.indexOf(v) !== -1 ? v : ''; }
+  // Campaign names are free text by design: passed through lowercased, not
+  // checked against a list.
+  function cleanCp(v) { return String(v || '').trim().toLowerCase(); }
+
+  var fromUrl = { ev: validEv(qp('utm_campaign')), ch: validCh(qp('utm_medium')), cp: cleanCp(qp('utm_campaign')) };
+  var urlTagged = !!(fromUrl.ev || fromUrl.ch || fromUrl.cp);
+
+  var TTL = 30 * 60 * 1000; // GA4's session timeout
+  var EMPTY = { ev: '', ch: '', cp: '' };
+
+  // The stored touch, or null if there is none or it has expired. An expired
+  // one is removed so it cannot be read later.
+  function load() {
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!o) return null;
+      if (!(o.t > 0) || Date.now() - o.t > TTL) { localStorage.removeItem(KEY); return null; }
+      return { ev: validEv(o.ev), ch: validCh(o.ch), cp: cleanCp(o.cp) };
+    } catch (e) { return null; }
+  }
+  function save(b) {
+    try { localStorage.setItem(KEY, JSON.stringify({ ev: b.ev, ch: b.ch, cp: b.cp, t: Date.now() })); } catch (e) {}
+  }
+
+  // Every page view: keep a live touch alive, or record the first tagged
+  // arrival if there is none. A tagged arrival never replaces a live touch.
+  // Storage blocked or private mode: nothing is stored and the form page's own
+  // URL still works.
+  var live = load();
+  if (live) save(live);
+  else if (urlTagged) save(fromUrl);
+
+  function stored() { return load() || EMPTY; }
+
+  function gaClientId() {
+    try {
+      var m = document.cookie.match(/(?:^|;\s*)_ga=([^;]+)/);
+      if (!m) return '';
+      var parts = decodeURIComponent(m[1]).split('.');
+      if (parts.length < 4) return '';
+      var id = parts.slice(-2).join('.');
+      return /^[0-9]+\.[0-9]+$/.test(id) ? id : '';
+    } catch (e) { return ''; }
+  }
+
+  function touch() {
+    if (urlTagged) return fromUrl;
+    var s = stored();
+    var ev = '';
+    try { if (window.vcAttribution) ev = validEv(window.vcAttribution.current().ev); } catch (e) {}
+    return { ev: ev || s.ev, ch: s.ch, cp: s.cp };
+  }
+
+  window.a3qFormFields = function (fields) {
+    var out = [];
+    var t = touch();
+    if (t.ev) out.push({ name: 'acquisition_event', value: t.ev });
+    if (t.ch) out.push({ name: 'source_channel', value: t.ch });
+    if (t.cp) out.push({ name: 'source_campaign', value: t.cp });
+    var cid = gaClientId();
+    if (cid) out.push({ name: 'ga_client_id', value: cid });
+    var email = '';
+    for (var i = 0; fields && i < fields.length; i++) if (fields[i].name === 'email') email = String(fields[i].value || '');
+    if (/@example\.com$/i.test(email.trim())) out.push({ name: 'test_record', value: 'true' });
+    return out;
+  };
+})();
+</script> <script>(function(){const cfg = {"hsUrl":"https://api.hsforms.com/submissions/v3/integration/submit/247249828/360d7c90-d31b-4433-a36f-5d7340330b71","repNames":{"bartels":"Tom Bartels","sharif":"Rashmee Sharif","patel":"Adil Patel","bostany":"Cecil Bostany","parker":"Tony Parker","hallmark":"Grant Hallmark","bilovsky":"Steph Bilovsky","frost":"Alyssa Frost"}};
+const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acquisition_path","acquisition_event","source_channel","ga_client_id"];
+
+  (function () {
+    function qp(k) { try { return (new URLSearchParams(location.search).get(k) || '').trim(); } catch (e) { return ''; } }
+    // One shape for every number, so dedupe and click-to-call work. Ten digits,
+    // or eleven starting with 1, become +1XXXXXXXXXX. Anything else is left as
+    // typed rather than mangled, because it is probably not a US number.
+    function tel(v) {
+      var d = (v || '').replace(/[^0-9]/g, '');
+      if (d.length === 11 && d.charAt(0) === '1') d = d.slice(1);
+      return d.length === 10 ? '+1' + d : (v || '').trim();
+    }
+    function val(id) { var el = document.getElementById(id); return el ? (el.value || '').trim() : ''; }
+    function cookie(n) { try { var m = document.cookie.match('(^|;)\\s*' + n + '\\s*=\\s*([^;]+)'); return m ? m.pop() : ''; } catch (e) { return ''; } }
+
+    var by = qp('by');
+    // Any handle matching the rep pattern that is not a platform. See @shared/attribution.
+    var rep = window.a3qAttrRules.rep(by);
+    // What put them in front of us. A piece forwarded from a card link, or one on
+    // this page's own URL when a printed QR points straight here. The card is the
+    // fallback, and the message field names the card either way.
+    var pieceIn = window.a3qAttrRules.piece(qp('piece'))
+      || window.a3qAttrRules.piece(qp('utm_content'));
+    var repName = cfg.repNames[by] || '';
+    document.getElementById('repline').textContent = repName
+      ? repName + ' will follow up.'
+      : 'Someone from the A3Q team will follow up.';
+    var back = document.getElementById('backLink');
+    if (by && repName) back.href = '/' + repName.split(' ')[0].toLowerCase() + '/';
+
+    var form = document.getElementById('capform');
+    var btn = document.getElementById('f-submit');
+    var err = document.getElementById('caperr');
+
+    function post(f) {
+      var ctx = { pageUri: location.href, pageName: document.title };
+      var hutk = cookie('hubspotutk');
+      if (hutk) ctx.hutk = hutk;
+      return fetch(cfg.hsUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ submittedAt: Date.now(), fields: f, context: ctx }),
+      }).then(function (r) {
+        if (!r.ok) {
+          // Surface HubSpot's own reason. It names the offending field, which is
+          // the difference between a five-minute fix and a guessing game.
+          return r.text().then(function (t) {
+            try { console.warn('HubSpot ' + r.status + ': ' + t); } catch (e) {}
+            throw new Error('HTTP ' + r.status);
+          });
+        }
+        return r;
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (!form.checkValidity()) { form.reportValidity(); return; }
+      if (val('f-website')) { finish(); return; } // bot
+
+      var fields = [
+        { name: 'firstname', value: val('f-first') },
+        { name: 'lastname', value: val('f-last') },
+        { name: 'contact_type', value: val('f-role') },
+        { name: 'brands', value: 'a3q' },
+        { name: 'source_piece', value: pieceIn || 'digital_card' },
+        {
+          name: 'message',
+          value: val('f-notes') || (repName ? "Sent from " + repName + "'s A3Q digital card." : 'Sent from an A3Q digital card.'),
+        },
+      ];
+      if (val('f-email')) fields.push({ name: 'email', value: val('f-email') });
+      if (val('f-company')) fields.push({ name: 'company', value: val('f-company') });
+      if (val('f-phone')) fields.push({ name: 'phone', value: tel(val('f-phone')) });
+      if (rep) fields.push({ name: 'source_rep', value: rep });
+      // The event code comes from the link that brought them here, the same way
+      // the landing pages read it. Nothing to switch on, nothing to switch off.
+      var ev = window.a3qAttrRules.ev(qp('utm_campaign'));
+      if (ev) fields.push({ name: 'events_attended', value: ev });
+      // event, else outbound when ?by= carries a rep, else inbound. Same rule as /attr.js.
+      fields.push({ name: 'acquisition_path', value: window.a3qAttrRules.path(rep, ev) });
+
+      // Nothing here is allowed to cost a lead, so fall back in stages:
+      // everything, then without attribution, then the fields that make a
+      // contact. Note what the stages do and do not catch: a field the form
+      // lacks is discarded silently and an unknown option value is accepted and
+      // quietly not written, so neither of those ever reaches this code. The
+      // stages catch a hard failure. See @shared/attribution.
+      var keep = ['firstname', 'lastname', 'email', 'contact_type', 'brands'];
+      // acquisition_event, source_channel, ga_client_id, test_record: see @shared/forms/FormFields.astro
+      if (window.a3qFormFields) fields = fields.concat(window.a3qFormFields(fields));
+      var noAttr = fields.filter(function (f) { return ATTRIBUTION_FIELDS.indexOf(f.name) === -1; });
+      var core = fields.filter(function (f) { return keep.indexOf(f.name) !== -1; });
+
+      btn.disabled = true;
+      btn.textContent = 'Sending…';
+      err.hidden = true;
+
+      post(fields)
+        .catch(function () { return post(noAttr); })
+        .catch(function () { return post(core); })
+        .then(function () {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: 'card_capture', card_person: by || 'unknown', contact_type: val('f-role') });
+          finish();
+        })
+        .catch(function () {
+          btn.disabled = false;
+          btn.textContent = 'Send';
+          err.textContent = 'That did not send. Check the email address and try again.';
+          err.hidden = false;
+        });
+    });
+
+    function finish() {
+      var first = val('f-first').replace(/[<>&]/g, '');
+      document.getElementById('donename').textContent = (first ? 'Thanks, ' + first + '. ' : 'Thanks. ') + "We'll be in touch.";
+      form.hidden = true;
+      document.getElementById('done').hidden = false;
+    }
+
+    document.getElementById('again').addEventListener('click', function () {
+      form.reset();
+      form.hidden = false;
+      document.getElementById('done').hidden = true;
+      btn.disabled = false;
+      btn.textContent = 'Send';
+      document.getElementById('f-first').focus();
+    });
+  })();
+})();</script>

@@ -1,7 +1,9 @@
 # a3quumsolutions.com
 
-The A3Q website. Three self-contained pages: all CSS is inline, the logo is inline SVG,
-and the favicon is a data URI, so there are no asset paths to break.
+The A3Q website, plus the team's digital business cards. The three hand-written pages below
+are self-contained: all CSS is inline, the logo is inline SVG, and the favicon is a data URI,
+so there are no asset paths to break. The cards are generated elsewhere and have their own
+section further down.
 
     index.html            served at /
     privacy/index.html    served at /privacy
@@ -21,6 +23,43 @@ committing, not after.
 
 `CNAME` is what holds the custom domain. Changing or removing it drops the domain and the
 site falls back to the github.io address.
+
+## The digital business cards
+
+Everything below is **generated, not hand-written**. Do not edit these files here; the edit
+would be overwritten by the next build and the source would still be wrong.
+
+    tom/ rashmee/ adil/ cecil/ grant/ tony/ alyssa/ steph/   one card each
+    capture/                                                 the form that takes a lead's info
+    cards/<name>.jpg  cards/<name>.vcf                       photo and contact file per person
+    cards/a3q-logo.svg  cards/qrcode.min.js                  shared by every card
+    _astro/                                                  the cards' CSS and JS
+    favicon.svg                                              the cards' icon
+    _headers                                                 Cloudflare syntax, inert here
+
+They come from the **`marketing-sites`** repo, which holds the A3Q, VoteCivic, SignalVote and
+Veritas Assembly card systems in one place. The source of a card is
+`src/brands/a3q/cards.ts` and the pages beside it. To change a phone number, a title or a
+photo, edit it there, then:
+
+    BRAND=a3q npm run build
+
+and copy `dist/` into this repo's root, **leaving out two files**:
+
+- `dist/index.html` — a redirect stub for a subdomain that was never built. Copying it would
+  replace this site's homepage with a redirect to itself.
+- `dist/robots.txt` — this repo's own is correct and points at this repo's sitemap.
+
+Delete the old contents of `_astro/` when you replace it. Those filenames carry a content
+hash, so every rebuild writes new ones and the previous files are left behind referencing
+nothing.
+
+The cards are `noindex`, so they are not in `sitemap.xml` and should not be added to it.
+They are reached by QR code and by a link someone texts, not by search.
+
+Nothing here redeploys them. A push to `marketing-sites` rebuilds the other three brands on
+Cloudflare Pages; A3Q has no Pages project, and this repo has no build step. **The cards go
+live when you commit them here**, the same as everything else.
 
 ## The ground is dark
 
