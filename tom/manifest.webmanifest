@@ -1,0 +1,13 @@
+{
+  "name": "Tom Bartels | A3Q",
+  "short_name": "Tom Bartels",
+  "start_url": "./",
+  "display": "browser",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

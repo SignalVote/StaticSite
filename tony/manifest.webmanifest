@@ -1,0 +1,13 @@
+{
+  "name": "Tony Parker | A3Q",
+  "short_name": "Tony Parker",
+  "start_url": "./",
+  "display": "browser",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

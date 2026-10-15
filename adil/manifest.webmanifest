@@ -1,0 +1,13 @@
+{
+  "name": "Adil Patel | A3Q",
+  "short_name": "Adil Patel",
+  "start_url": "./",
+  "display": "browser",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

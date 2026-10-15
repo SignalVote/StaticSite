@@ -1,0 +1,13 @@
+{
+  "name": "Alyssa Frost | A3Q",
+  "short_name": "Alyssa Frost",
+  "start_url": "./",
+  "display": "browser",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

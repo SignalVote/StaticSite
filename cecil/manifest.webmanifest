@@ -1,0 +1,13 @@
+{
+  "name": "Cecil Bostany | A3Q",
+  "short_name": "Cecil Bostany",
+  "start_url": "./",
+  "display": "browser",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
