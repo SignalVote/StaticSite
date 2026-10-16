@@ -350,7 +350,7 @@ Birmingham, Alabama
     return out;
   };
 })();
-</script> <script>(function(){const cfg = {"hsUrl":"https://api.hsforms.com/submissions/v3/integration/submit/247249828/360d7c90-d31b-4433-a36f-5d7340330b71","program":null};
+</script> <script>(function(){const cfg = {"hsUrl":"https://api.hsforms.com/submissions/v3/integration/submit/247249828/360d7c90-d31b-4433-a36f-5d7340330b71","program":{"name":"program","value":"campus_ua"},"contactType":"campus_contact"};
 const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acquisition_path","acquisition_event","source_channel","ga_client_id"];
 
 (function () {
@@ -421,11 +421,12 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
       { name: 'firstname', value: first },
       { name: 'email', value: val('f-email') },
       { name: 'brands', value: 'a3q' },
+      { name: 'contact_type', value: cfg.contactType },
+      { name: 'program', value: cfg.program.value },
       { name: 'message', value: lines.join('\n') },
     ];
     if (last) fields.push({ name: 'lastname', value: last });
     if (val('f-dept')) fields.push({ name: 'company', value: val('f-dept') });
-    if (cfg.program) fields.push({ name: cfg.program.name, value: cfg.program.value });
 
     // Same attribution rules as every other form (rep, piece, event, path), read
     // off this page's own URL, then channel, campaign, GA client id, test_record
@@ -435,7 +436,7 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
 
     // Nothing is allowed to cost a lead: everything, then without attribution,
     // then the fields that make a contact.
-    var keep = ['firstname', 'lastname', 'email', 'brands', 'message'];
+    var keep = ['firstname', 'lastname', 'email', 'brands', 'contact_type', 'program', 'message'];
     var noAttr = fields.filter(function (f) { return ATTRIBUTION_FIELDS.indexOf(f.name) === -1; });
     var core = fields.filter(function (f) { return keep.indexOf(f.name) !== -1; });
 
