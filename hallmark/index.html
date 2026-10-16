@@ -1,0 +1,388 @@
+<!DOCTYPE html><html lang="en"> <head><!-- The shared attribution rules, first in the head: the block below validates
+         an event code with them before anything else runs. --><script>window.a3qAttrRules = window.a3qAttrRules || (function () {
+  var NAME = /^[a-z0-9_]+$/;
+  var EVENT = /^ev-[0-9]{4}-[a-z]{4}$/;
+  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta"];
+  function rep(v) { v = String(v || ''); return NAME.test(v) && PLATFORMS.indexOf(v) === -1 ? v : ''; }
+  function piece(v) { v = String(v || ''); return NAME.test(v) ? v : ''; }
+  // Codes are lowercase; a printed EV-2610-PACS still counts.
+  function ev(v) { v = String(v || '').toLowerCase(); return EVENT.test(v) ? v : ''; }
+  function path(r, e) { return e ? 'event' : (r ? 'outbound' : 'inbound'); }
+  // The fields for a page that has only its own query string to go on.
+  function fromSearch(search) {
+    function qp(k) { try { return (new URLSearchParams(search).get(k) || '').trim(); } catch (e) { return ''; } }
+    var r = rep(qp('utm_source')), p = piece(qp('utm_content')), e = ev(qp('utm_campaign'));
+    var out = [];
+    if (r) out.push({ name: 'source_rep', value: r });
+    if (p) out.push({ name: 'source_piece', value: p });
+    if (e) out.push({ name: 'events_attended', value: e });
+    out.push({ name: 'acquisition_path', value: path(r, e) });
+    return out;
+  }
+  return { rep: rep, piece: piece, ev: ev, path: path, fromSearch: fromSearch };
+})();</script><script>(function(){const cardEvents = [{"slug":"patel","brand":"a3q","code":"ev-2610-pacs","start":"2026-10-15","end":"2026-10-15"}];
+
+      // Tag this card with an event code while a show is running.
+      //
+      // One permanent link and one permanent QR per person, with no utm_campaign in
+      // either. A row in @shared/config/card-events gives a slug a code for a window
+      // of Eastern calendar days, and inside that window the card writes the code
+      // into its own URL before anything reads it. Outside the window, nothing
+      // happens and the URL is left exactly as it arrived.
+      //
+      // replaceState, not a redirect: the URL has to be right before Tag Manager
+      // reads it, and a reload at a booth is a second the person holding the phone
+      // can see. This block runs ahead of the GTM snippet and ahead of the card
+      // script, so GA4 and the /capture link both see the tagged URL.
+      //
+      // A utm_campaign already in the URL always wins: a link someone was handed is
+      // a fact, a schedule is a guess about where the phone is.
+      (function () {
+        try {
+          if (!cardEvents || !cardEvents.length) return;
+          var rules = window.a3qAttrRules;
+          if (!rules) return;
+          var qs = new URLSearchParams(location.search);
+          var slug = location.pathname.replace(/^\/+/, '').replace(/\/+$/, '').toLowerCase();
+          if (!slug || slug.indexOf('/') !== -1) return;
+          var today = (function () {
+            // A date override, for checking a window without waiting for the day.
+            // Local hosts only, so it cannot be used against a live card.
+            if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) {
+              var o = qs.get('__evdate') || '';
+              if (/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(o)) return o;
+            }
+            // en-CA renders as YYYY-MM-DD, which compares correctly as a string.
+            return new Intl.DateTimeFormat('en-CA', {
+              timeZone: 'America/New_York',
+              year: 'numeric', month: '2-digit', day: '2-digit',
+            }).format(new Date());
+          })();
+          if (!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(today)) return;
+          // The code this card is scheduled to carry today, if any.
+          var active = '';
+          for (var i = 0; i < cardEvents.length; i++) {
+            var row = cardEvents[i];
+            if (row.slug !== slug) continue;
+            if (today < row.start || today > row.end) continue;
+            // Validated with the same rule every form uses. A code that fails it is
+            // skipped, so a typo here tags nothing rather than tagging wrongly.
+            active = rules.ev(row.code);
+            if (active) break;
+          }
+          if (!active) return;
+          
+          // Mark the code as scheduled rather than handed over. Anything that gives out
+          // a link someone keeps has to tell the two apart, because only a code that
+          // came in on the link belongs in a link that outlives today.
+          //
+          // Set whenever the URL is carrying today's scheduled code, not only on the
+          // load that wrote it. The arrival tagging below reloads the page, and a person
+          // can reload it themselves, so a flag set once would be gone by the time the
+          // card script reads it.
+          var current = (qs.get('utm_campaign') || '').trim();
+          if (current) {
+            if (current === active) window.a3qScheduledCampaign = active;
+            // A code already in the URL wins either way.
+            return;
+          }
+          window.a3qScheduledCampaign = active;
+          qs.set('utm_campaign', active);
+          history.replaceState(null, '', location.pathname + '?' + qs.toString() + location.hash);
+        } catch (e) {}
+      })();
+    })();</script><script>(function(){const tracking = "utm_source=hallmark&utm_medium=referral";
+
+      // A card reached without tracking (a texted link, a typed address) can only have
+      // come from this person's card, so tag it before anything records the visit.
+      if (tracking && location.search.indexOf('utm_source=') === -1) {
+        // Only the keys the link did not already carry. A flyer's utm_content is the
+        // piece that originated the visit, so keep it: appending ours as well would
+        // leave utm_content in the URL twice, and which one any reader picks up is
+        // not something to rely on.
+        var qs = '&' + location.search.slice(1);
+        var add = tracking.split('&').filter(function (p) {
+          return p && qs.indexOf('&' + p.split('=')[0] + '=') === -1;
+        });
+        if (add.length) {
+          location.replace(location.pathname + (location.search ? location.search + '&' : '?') + add.join('&') + location.hash);
+        }
+      }
+    })();</script><script>(function(){const GTM_ID = "GTM-5SG8HF32";
+
+  (function (w, d, s, l, i) {
+    w[l] = w[l] || [];
+    w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+    var f = d.getElementsByTagName(s)[0],
+      j = d.createElement(s),
+      dl = l != 'dataLayer' ? '&l=' + l : '';
+    j.async = true;
+    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+    f.parentNode.insertBefore(j, f);
+  })(window, document, 'script', 'dataLayer', GTM_ID);
+})();</script><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="generator" content="Astro v5.18.2"><title>Grant Hallmark | A3Q</title><meta name="description" content="Better software for challenging markets."><link rel="canonical" href="https://a3quumsolutions.com/hallmark/"><meta name="robots" content="noindex"><meta name="theme-color" content="#FF5A1F"><link rel="icon" href="/favicon.svg" type="image/svg+xml"><meta property="og:type" content="website"><meta property="og:site_name" content="A3Q"><meta property="og:title" content="Grant Hallmark | A3Q"><meta property="og:description" content="Better software for challenging markets."><meta property="og:url" content="https://a3quumsolutions.com/hallmark/"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="Grant Hallmark | A3Q"><meta name="twitter:description" content="Better software for challenging markets."><!-- Home screen icon. iOS ignores an SVG favicon when someone taps Add to
+         Home Screen and falls back to a screenshot of the page, which crops to
+         whatever happens to be at the top. A 180x180 PNG, opaque and square
+         (iOS rounds the corners itself), gives the brand mark instead. No
+         apple-mobile-web-app-title: the page title is the person's name, which
+         is a better label under the icon than the brand would be. --><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><!-- Relative on purpose: on /adil/ this resolves to /adil/manifest.webmanifest,
+           whose start_url is the canonical card URL. See pages/[slug]/manifest.webmanifest. -->
+      <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#0D0D0D"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet"><script>/* A3Q form tracking fields. The one source for window.a3qFormFields().
+ *
+ * Loaded on every page of every brand: inline through <FormFields /> on Astro
+ * pages, and as /touch.js on the hand-written static pages. Do not copy it.
+ *
+ * ON EVERY PAGE it stores the visit's first tagged arrival in localStorage
+ * (key a3q_touch), so a visitor who lands on a tagged link and goes on to a
+ * form, in the same tab or a new one, still carries the event, channel and
+ * campaign. First arrival wins, and the set is stored and read as one.
+ *
+ * THE WINDOW IS 30 MINUTES, refreshed by every page view, to match GA4's
+ * session timeout. Thirty minutes with no page view on the site and the stored
+ * touch is discarded on the next read. localStorage rather than sessionStorage
+ * because sessionStorage is not shared with a new tab; the expiry keeps it to
+ * one visit rather than a durable record. Internal links are never given utm_*
+ * parameters: GA4 would read each click as a new campaign arrival.
+ *
+ * ON A FORM PAGE the page calls a3qFormFields(fields) and concats the result:
+ *
+ *   acquisition_event  utm_campaign, lowercased, only if it matches ev-####-xxxx
+ *   source_channel     utm_medium, lowercased, only if it is on CHANNELS
+ *   source_campaign    utm_campaign, lowercased, not validated (conventions v3)
+ *   ga_client_id       the _ga cookie, last two dot-separated parts
+ *   test_record        "true" when the submitted email ends in @example.com
+ *
+ * Where event, channel and campaign come from, in order:
+ *   1. the form page's own URL, if it carries any of them (used as a set);
+ *   2. otherwise the stored first arrival: the event from /attr.js
+ *      (window.vcAttribution, VoteCivic and Veritas) when it has one, else
+ *      a3q_touch, and the channel and campaign from a3q_touch.
+ *
+ * A field with no valid value is left out, never sent blank. source_list is not
+ * sent here: it is set at import.
+ */
+(function () {
+  if (window.a3qFormFields) return;
+  // paid_social is the v3 spelling. paid-social stays so links already printed
+  // or running in ads keep attributing.
+  var CHANNELS = ['qr', 'email', 'social', 'paid_social', 'paid-social', 'cpc', 'display', 'sms', 'referral'];
+  var KEY = 'a3q_touch';
+
+  function qp(k) {
+    try { return (new URLSearchParams(location.search).get(k) || '').trim().toLowerCase(); } catch (e) { return ''; }
+  }
+  function validEv(v) { v = String(v || '').toLowerCase(); return /^ev-[0-9]{4}-[a-z]{4}$/.test(v) ? v : ''; }
+  function validCh(v) { v = String(v || '').toLowerCase(); return CHANNELS.indexOf(v) !== -1 ? v : ''; }
+  // Campaign names are free text by design: passed through lowercased, not
+  // checked against a list.
+  function cleanCp(v) { return String(v || '').trim().toLowerCase(); }
+
+  var fromUrl = { ev: validEv(qp('utm_campaign')), ch: validCh(qp('utm_medium')), cp: cleanCp(qp('utm_campaign')) };
+  var urlTagged = !!(fromUrl.ev || fromUrl.ch || fromUrl.cp);
+
+  var TTL = 30 * 60 * 1000; // GA4's session timeout
+  var EMPTY = { ev: '', ch: '', cp: '' };
+
+  // The stored touch, or null if there is none or it has expired. An expired
+  // one is removed so it cannot be read later.
+  function load() {
+    try {
+      var o = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (!o) return null;
+      if (!(o.t > 0) || Date.now() - o.t > TTL) { localStorage.removeItem(KEY); return null; }
+      return { ev: validEv(o.ev), ch: validCh(o.ch), cp: cleanCp(o.cp) };
+    } catch (e) { return null; }
+  }
+  function save(b) {
+    try { localStorage.setItem(KEY, JSON.stringify({ ev: b.ev, ch: b.ch, cp: b.cp, t: Date.now() })); } catch (e) {}
+  }
+
+  // Every page view: keep a live touch alive, or record the first tagged
+  // arrival if there is none. A tagged arrival never replaces a live touch.
+  // Storage blocked or private mode: nothing is stored and the form page's own
+  // URL still works.
+  var live = load();
+  if (live) save(live);
+  else if (urlTagged) save(fromUrl);
+
+  function stored() { return load() || EMPTY; }
+
+  function gaClientId() {
+    try {
+      var m = document.cookie.match(/(?:^|;\s*)_ga=([^;]+)/);
+      if (!m) return '';
+      var parts = decodeURIComponent(m[1]).split('.');
+      if (parts.length < 4) return '';
+      var id = parts.slice(-2).join('.');
+      return /^[0-9]+\.[0-9]+$/.test(id) ? id : '';
+    } catch (e) { return ''; }
+  }
+
+  function touch() {
+    if (urlTagged) return fromUrl;
+    var s = stored();
+    var ev = '';
+    try { if (window.vcAttribution) ev = validEv(window.vcAttribution.current().ev); } catch (e) {}
+    return { ev: ev || s.ev, ch: s.ch, cp: s.cp };
+  }
+
+  window.a3qFormFields = function (fields) {
+    var out = [];
+    var t = touch();
+    if (t.ev) out.push({ name: 'acquisition_event', value: t.ev });
+    if (t.ch) out.push({ name: 'source_channel', value: t.ch });
+    if (t.cp) out.push({ name: 'source_campaign', value: t.cp });
+    var cid = gaClientId();
+    if (cid) out.push({ name: 'ga_client_id', value: cid });
+    var email = '';
+    var brand = '';
+    for (var i = 0; fields && i < fields.length; i++) {
+      if (fields[i].name === 'email') email = String(fields[i].value || '');
+      if (fields[i].name === 'brands') brand = String(fields[i].value || '');
+    }
+    if (/@example\.com$/i.test(email.trim())) out.push({ name: 'test_record', value: 'true' });
+    // Each brand also gets a flag of its own (D24, R-081): brand_a3q,
+    // brand_signalvote, brand_veritasassembly, brand_votecivic. They exist so a
+    // brand can be filtered in HubSpot without parsing the shared `brands`
+    // value, which holds one brand today but is the field every form already
+    // sends. The name is built from that value, so a new brand needs no change
+    // here, only the matching property in HubSpot: a field the form does not
+    // have is discarded in silence, with no error anywhere.
+    brand = brand.trim().toLowerCase();
+    if (/^[a-z0-9_]+$/.test(brand)) out.push({ name: 'brand_' + brand, value: 'true' });
+    return out;
+  };
+})();
+</script><link rel="stylesheet" href="/_astro/bartels.BlA3-QSi.css"></head> <body> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5SG8HF32" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>  <main class="a3q-card"> <article class="panel"> <header class="top"> <img class="logo" src="/cards/a3q-logo.svg" alt="A3Q" width="2598" height="848"> <p class="mono">Better software for challenging markets.</p> </header> <section class="who"> <img class="portrait" src="/cards/grant.jpg" alt="" width="320" height="320"> <h1>Grant<br><b>Hallmark</b></h1> <p class="title">Senior Vice President</p> <p class="place">A3Q &middot; Birmingham, AL</p> </section> <section class="rows"> <div class="row"><span class="k">Email</span><a class="v" href="mailto:grant@a3quumsolutions.com">grant@a3quumsolutions.com</a></div> <div class="row"><span class="k">Mobile</span><a class="v" href="tel:+12055380341">(205) 538-0341</a></div> <div class="row"><span class="k">Web</span><a class="v" id="siteLink" href="https://a3quumsolutions.com/">a3quumsolutions.com</a></div> </section> <section class="actions"> <a class="btn btn-primary" id="sendInfo" href="/capture/?by=hallmark">Send info</a> <p class="hint">Send us your details and we'll follow up.</p> <a class="btn btn-ghost" id="save" href="/cards/hallmark.vcf">Save contact</a> <p class="hint" id="hint">Or download my contact file (.vcf) for your phone.</p> </section> <footer class="foot"> <button class="link" id="showQr" type="button">Show QR code</button> <button class="link" id="share" type="button" hidden>Share this card</button> </footer> </article> </main> <div class="qr" id="qr" hidden role="dialog" aria-modal="true" aria-label="QR code"> <button class="close" id="closeQr" type="button" aria-label="Close">&times;</button> <img class="logo" src="/cards/a3q-logo.svg" alt="A3Q" width="2598" height="848"> <div class="plate"><canvas id="qrCanvas" width="640" height="640"></canvas></div> <p class="who">Grant Hallmark</p> <p class="what">Scan to save my contact</p> </div> <script>(function(){const card = {"first":"Grant","last":"Hallmark","title":"Senior Vice President","org":"A3Q","location":"Birmingham, AL","phone":"+12055380341","email":"grant@a3quumsolutions.com","site":"https://a3quumsolutions.com","note":"A3Q — better software for challenging markets. Parent company of VoteCivic, SignalVote and Veritas Assembly. Birmingham, Alabama.","shareText":"This is Grant. Great meeting you! This link is my digital business card. You can save my contact from it, or send me yours so we can reconnect.","vcf":"/cards/hallmark.vcf","handle":"hallmark","medium":"referral","piece":"digital_card"};
+
+  (function () {
+    var ua = navigator.userAgent || '';
+    var isAndroid = /Android/i.test(ua);
+    var isIOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    var save = document.getElementById('save');
+    var hint = document.getElementById('hint');
+    var vcfAbs = new URL(card.vcf, location.href).href;
+
+    // The event code rides in the link, not in a build-time constant. Whatever
+    // utm_campaign the card was reached with travels on to the QR, the share link,
+    // the website link and the capture form. A missing code leaves a blank rather
+    // than last event's name, and there is no switch anyone has to remember.
+    function qp(k) { try { return (new URLSearchParams(location.search).get(k) || '').trim(); } catch (e) { return ''; } }
+    var evCode = qp('utm_campaign');
+    var evQs = evCode ? '&utm_campaign=' + encodeURIComponent(evCode) : '';
+    // Two campaigns, not one. `evQs` is what this visit reports: a code from the
+    // link or one the schedule wrote for today, and both belong in analytics and
+    // on the capture form.
+    //
+    // `keepQs` is what may go into something the other person keeps. A scheduled
+    // code belongs to a date, not to this card, so it must never be baked into a
+    // QR someone screenshots or a link they save: a code in a URL beats the
+    // schedule, so that person would stay credited to this show for good.
+    // CardLayout sets a3qScheduledCampaign only when it wrote the code itself.
+    var keepEv = window.a3qScheduledCampaign ? '' : evCode;
+    var keepQs = keepEv ? '&utm_campaign=' + encodeURIComponent(keepEv) : '';
+    // A piece on the link that brought them here, such as a flyer's utm_content,
+    // is what put this person in front of us, so it travels on to the capture
+    // form and wins there over digital_card. Sent as `piece` and not as
+    // utm_content because internal links never carry utm_* parameters.
+    var pieceIn = window.a3qAttrRules.piece(qp('utm_content'));
+    var pieceQs = pieceIn && pieceIn !== card.piece ? '&piece=' + encodeURIComponent(pieceIn) : '';
+
+    // The tracked card URL: what the QR encodes.
+    var utmBase = 'utm_source=' + card.handle + '&utm_medium=' + card.medium + '&utm_content=' + card.piece;
+    var utm = utmBase + evQs;
+    // The QR is the thing most likely to be screenshotted or printed, so it gets
+    // the keepable form.
+    var utmKeep = utmBase + keepQs;
+    // Trailing slash on purpose. The page is capture/index.html, so /capture
+    // without it is a redirect on every host and a 301 on GitHub Pages, which is
+    // where the A3Q cards are served from. One less hop before a lead's form.
+    var captureUrl = '/capture/?by=' + card.handle + evQs + pieceQs;
+    var sendInfo = document.getElementById('sendInfo');
+    if (sendInfo) sendInfo.href = captureUrl;
+    var cardUrl = location.origin + location.pathname + '?' + utmKeep;
+    // Shared by text or AirDrop: the clean address. The page tags itself on arrival
+    // (see CardLayout), so attribution survives without the long link in the message.
+    var shareUrl = location.origin + location.pathname;
+
+    var site = document.getElementById('siteLink');
+    if (site) site.href = card.site + '/?' + utm;
+
+    function intentUrl() {
+      var e = encodeURIComponent;
+      return 'intent://contacts/people/#Intent;scheme=content;action=android.intent.action.INSERT;type=vnd.android.cursor.dir/contact;'
+        + 'S.name=' + e(card.first + ' ' + card.last) + ';S.company=' + e(card.org) + (card.title ? ';S.job_title=' + e(card.title) : '')
+        + (card.phone ? ';S.phone=' + e(card.phone) + ';i.phone_type=2' : '')
+        + ';S.email=' + e(card.email) + ';i.email_type=2'
+        + ';S.postal=' + e(card.location)
+        + ';S.notes=' + e(card.note)
+        + ';S.browser_fallback_url=' + e(vcfAbs) + ';end';
+    }
+
+    if (isAndroid) {
+      save.href = intentUrl();
+      hint.innerHTML = 'Opens a new contact, already filled in. Tap Save there. Or <a href="' + card.vcf + '">download the contact file</a>.';
+    } else if (isIOS) {
+      hint.textContent = 'Opens a contact card. Tap Create New Contact, then Done.';
+    } else {
+      hint.textContent = 'Downloads a contact file (.vcf). Open it to add the contact.';
+    }
+
+    function track(method) {
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({ event: 'save_contact', save_method: method, card_person: card.handle });
+    }
+    save.addEventListener('click', function () { track(isAndroid ? 'android_intent' : 'vcf'); });
+    hint.addEventListener('click', function (ev) { if (ev.target.tagName === 'A') track('vcf_link'); });
+
+    var share = document.getElementById('share');
+    if (navigator.share) {
+      share.hidden = false;
+      share.addEventListener('click', function () {
+        navigator.share({ title: card.first + ' ' + card.last + ' | ' + card.org, text: card.shareText, url: shareUrl }).catch(function () {});
+      });
+    }
+
+    if (location.hash === '#info') { location.replace(captureUrl); return; }
+
+    // The QR library is 20KB and most card views never open the overlay, so it
+    // loads on the first tap instead of on every page view.
+    var qrBox = document.getElementById('qr'), drawn = false, loading = false, waiting = [];
+    function withQrLib(cb) {
+      if (typeof qrcode === 'function') return cb();
+      waiting.push(cb);
+      if (loading) return; // already fetching; the queue runs when it lands
+      loading = true;
+      var el = document.createElement('script');
+      el.src = '/cards/qrcode.min.js';
+      el.onload = function () {
+        loading = false;
+        var q = waiting; waiting = [];
+        for (var i = 0; i < q.length; i++) q[i]();
+      };
+      el.onerror = function () { loading = false; waiting = []; el.remove(); };
+      document.head.appendChild(el);
+    }
+    function drawQr() {
+      if (drawn || typeof qrcode !== 'function') return;
+      drawn = true;
+      var q = qrcode(0, 'H'); q.addData(cardUrl); q.make();
+      var n = q.getModuleCount(), cv = document.getElementById('qrCanvas'), S = cv.width, m = 4;
+      var cell = S / (n + 2 * m), ctx = cv.getContext('2d');
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(0, 0, S, S);
+      ctx.fillStyle = '#0D0D0D';
+      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) ctx.fillRect(Math.floor((c + m) * cell), Math.floor((r + m) * cell), Math.ceil(cell), Math.ceil(cell));
+      // A3Q's mark is a solid orange tile, so it stamps cleanly into the centre.
+      var w = S * 0.16, pad = S * 0.03, x = (S - w) / 2, y = (S - w) / 2;
+      ctx.fillStyle = '#FFFFFF'; ctx.fillRect(x - pad, y - pad, w + 2 * pad, w + 2 * pad);
+      ctx.fillStyle = '#FF5A1F'; ctx.fillRect(x, y, w, w);
+    }
+    var showQr = document.getElementById('showQr');
+    function openQr() { qrBox.hidden = false; withQrLib(drawQr); }
+    showQr.addEventListener('click', function () { openQr(); document.getElementById('closeQr').focus(); });
+    showQr.addEventListener('pointerenter', function () { withQrLib(function () {}); });
+    document.getElementById('closeQr').addEventListener('click', function () { qrBox.hidden = true; });
+    document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') qrBox.hidden = true; });
+    if (location.hash === '#qr') { openQr(); }
+  })();
+})();</script>  </body></html>

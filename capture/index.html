@@ -20,7 +20,7 @@
     return out;
   }
   return { rep: rep, piece: piece, ev: ev, path: path, fromSearch: fromSearch };
-})();</script><script>(function(){const cardEvents = [{"slug":"adil","brand":"a3q","code":"ev-2610-pacs","start":"2026-10-15","end":"2026-10-15"}];
+})();</script><script>(function(){const cardEvents = [{"slug":"patel","brand":"a3q","code":"ev-2610-pacs","start":"2026-10-15","end":"2026-10-15"}];
 
       // Tag this card with an event code while a show is running.
       //
@@ -233,14 +233,27 @@
     var cid = gaClientId();
     if (cid) out.push({ name: 'ga_client_id', value: cid });
     var email = '';
-    for (var i = 0; fields && i < fields.length; i++) if (fields[i].name === 'email') email = String(fields[i].value || '');
+    var brand = '';
+    for (var i = 0; fields && i < fields.length; i++) {
+      if (fields[i].name === 'email') email = String(fields[i].value || '');
+      if (fields[i].name === 'brands') brand = String(fields[i].value || '');
+    }
     if (/@example\.com$/i.test(email.trim())) out.push({ name: 'test_record', value: 'true' });
+    // Each brand also gets a flag of its own (D24, R-081): brand_a3q,
+    // brand_signalvote, brand_veritasassembly, brand_votecivic. They exist so a
+    // brand can be filtered in HubSpot without parsing the shared `brands`
+    // value, which holds one brand today but is the field every form already
+    // sends. The name is built from that value, so a new brand needs no change
+    // here, only the matching property in HubSpot: a field the form does not
+    // have is discarded in silence, with no error anywhere.
+    brand = brand.trim().toLowerCase();
+    if (/^[a-z0-9_]+$/.test(brand)) out.push({ name: 'brand_' + brand, value: 'true' });
     return out;
   };
 })();
-</script><link rel="stylesheet" href="/_astro/adil.BlA3-QSi.css">
+</script><link rel="stylesheet" href="/_astro/bartels.BlA3-QSi.css">
 <style>.cap{margin-top:30px;display:flex;flex-direction:column;gap:16px}.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.field>span{font-family:var(--a3q-mono);font-size:13px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--a3q-secondary)}.field>span em{font-style:normal;text-transform:none;letter-spacing:0;font-weight:500;opacity:.75}.field input,.field select,.field textarea{font-family:inherit;font-size:16px;color:var(--a3q-white);background:var(--a3q-graphite);border:1px solid var(--a3q-rule);padding:12px;width:100%;min-height:50px;border-radius:0}.field textarea{resize:vertical;min-height:78px}.field input:focus-visible,.field select:focus-visible,.field textarea:focus-visible{outline:2px solid var(--a3q-orange);outline-offset:1px;border-color:var(--a3q-orange)}.hp{position:absolute;left:-9999px}.err{font-size:14px;color:var(--a3q-orange)}.done{margin-top:34px}.done h2{font-size:28px;font-weight:800;line-height:1.1;letter-spacing:-.8px}.done .btn{margin-top:24px}.foot a.link{text-decoration:none}
-</style></head> <body> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5SG8HF32" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>  <main class="a3q-card"> <article class="panel"> <header class="top"> <img class="logo" src="/cards/a3q-logo.svg" alt="A3Q" width="2598" height="848"> <p class="mono">Send your info</p> </header> <section class="who"> <h1>Send<br><b>your info</b></h1> <p class="title" id="repline">Someone from the A3Q team will follow up.</p> </section> <form class="cap" id="capform" novalidate> <div class="two"> <label class="field"><span>First name</span><input id="f-first" autocomplete="off" required></label> <label class="field"><span>Last name</span><input id="f-last" autocomplete="off" required></label> </div> <label class="field"><span>Email</span><input id="f-email" type="email" inputmode="email" autocomplete="off" required></label> <label class="field"><span>Phone</span><input id="f-phone" type="tel" inputmode="tel" autocomplete="off"></label> <label class="field"><span>Organization</span><input id="f-company" autocomplete="off"></label> <label class="field"> <span>I am a</span> <select id="f-role" required> <option value="" disabled selected>Choose one</option> <option value="candidate">Candidate</option><option value="campaign_staff">Campaign staff</option><option value="consultant">Consultant</option><option value="org_lead">Organization leader</option><option value="vendor">Vendor or partner</option><option value="investor">Investor</option><option value="press">Press</option> </select> </label> <label class="field"><span>Anything we should know <em>optional</em></span><textarea id="f-notes" rows="3"></textarea></label> <label class="hp" aria-hidden="true">Website <input id="f-website" tabindex="-1" autocomplete="off"></label> <p class="err" id="caperr" role="alert" hidden></p> <button class="btn btn-primary" id="f-submit" type="submit">Send</button> <p class="hint">We use this to reply and to follow up about A3Q. Unsubscribe or ask us to delete your information any time.</p> </form> <div class="done" id="done" role="status" hidden> <h2 id="donename">Thanks. We'll be in touch.</h2> <button class="btn btn-ghost" id="again" type="button">Send another</button> </div> <footer class="foot"> <a class="link" href="/" id="backLink">Back to the card</a> </footer> </article> </main>  </body></html>  <script>window.a3qAttrRules = window.a3qAttrRules || (function () {
+</style></head> <body> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5SG8HF32" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>  <main class="a3q-card"> <article class="panel"> <header class="top"> <img class="logo" src="/cards/a3q-logo.svg" alt="A3Q" width="2598" height="848"> <p class="mono">Send your info</p> </header> <section class="who"> <h1>Send<br><b>your info</b></h1> <p class="title" id="repline">Someone from the A3Q team will follow up.</p> </section> <form class="cap" id="capform" novalidate> <div class="two"> <label class="field"><span>First name *</span><input id="f-first" autocomplete="off" required></label> <label class="field"><span>Last name *</span><input id="f-last" autocomplete="off" required></label> </div> <label class="field"><span>Email *</span><input id="f-email" type="email" inputmode="email" autocomplete="off" required></label> <label class="field"><span>Phone</span><input id="f-phone" type="tel" inputmode="tel" autocomplete="off"></label> <label class="field"><span>Anything we should know</span><textarea id="f-notes" rows="3"></textarea></label> <label class="field"> <span>I am a</span> <select id="f-role"> <option value="" selected>Choose one</option> <option value="candidate">Candidate</option><option value="campaign_staff">Campaign staff</option><option value="consultant">Consultant</option><option value="org_lead">Organization leader</option><option value="vendor">Vendor or partner</option><option value="investor">Investor</option><option value="press">Press</option> </select> </label> <label class="hp" aria-hidden="true">Website <input id="f-website" tabindex="-1" autocomplete="off"></label> <p class="hint">* required</p> <p class="err" id="caperr" role="alert" hidden></p> <button class="btn btn-primary" id="f-submit" type="submit">Send</button> <p class="hint">We use this to reply and to follow up about A3Q. Unsubscribe or ask us to delete your information any time.</p> </form> <div class="done" id="done" role="status" hidden> <h2 id="donename">Thanks. We'll be in touch.</h2> <button class="btn btn-ghost" id="again" type="button">Send another</button> </div> <footer class="foot"> <a class="link" href="/" id="backLink">Back to the card</a> </footer> </article> </main>  </body></html>  <script>window.a3qAttrRules = window.a3qAttrRules || (function () {
   var NAME = /^[a-z0-9_]+$/;
   var EVENT = /^ev-[0-9]{4}-[a-z]{4}$/;
   var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta"];
@@ -369,12 +382,25 @@
     var cid = gaClientId();
     if (cid) out.push({ name: 'ga_client_id', value: cid });
     var email = '';
-    for (var i = 0; fields && i < fields.length; i++) if (fields[i].name === 'email') email = String(fields[i].value || '');
+    var brand = '';
+    for (var i = 0; fields && i < fields.length; i++) {
+      if (fields[i].name === 'email') email = String(fields[i].value || '');
+      if (fields[i].name === 'brands') brand = String(fields[i].value || '');
+    }
     if (/@example\.com$/i.test(email.trim())) out.push({ name: 'test_record', value: 'true' });
+    // Each brand also gets a flag of its own (D24, R-081): brand_a3q,
+    // brand_signalvote, brand_veritasassembly, brand_votecivic. They exist so a
+    // brand can be filtered in HubSpot without parsing the shared `brands`
+    // value, which holds one brand today but is the field every form already
+    // sends. The name is built from that value, so a new brand needs no change
+    // here, only the matching property in HubSpot: a field the form does not
+    // have is discarded in silence, with no error anywhere.
+    brand = brand.trim().toLowerCase();
+    if (/^[a-z0-9_]+$/.test(brand)) out.push({ name: 'brand_' + brand, value: 'true' });
     return out;
   };
 })();
-</script> <script>(function(){const cfg = {"hsUrl":"https://api.hsforms.com/submissions/v3/integration/submit/247249828/360d7c90-d31b-4433-a36f-5d7340330b71","repNames":{"bartels":"Tom Bartels","sharif":"Rashmee Sharif","patel":"Adil Patel","bostany":"Cecil Bostany","parker":"Tony Parker","hallmark":"Grant Hallmark","bilovsky":"Steph Bilovsky","frost":"Alyssa Frost"}};
+</script> <script>(function(){const cfg = {"hsUrl":"https://api.hsforms.com/submissions/v3/integration/submit/247249828/360d7c90-d31b-4433-a36f-5d7340330b71","repNames":{"bartels":"Tom Bartels","sharif":"Rashmee Sharif","patel":"Adil Patel","bostany":"Cecil Bostany","parker":"Tony Parker","hallmark":"Grant Hallmark","bilovsky":"Steph Bilovsky","frost":"Alyssa Frost","bimes":"Alex Bimes","davidson":"Bradley Davidson"}};
 const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acquisition_path","acquisition_event","source_channel","ga_client_id"];
 
   (function () {
@@ -438,7 +464,6 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
       var fields = [
         { name: 'firstname', value: val('f-first') },
         { name: 'lastname', value: val('f-last') },
-        { name: 'contact_type', value: val('f-role') },
         { name: 'brands', value: 'a3q' },
         { name: 'source_piece', value: pieceIn || 'digital_card' },
         {
@@ -447,7 +472,9 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
         },
       ];
       if (val('f-email')) fields.push({ name: 'email', value: val('f-email') });
-      if (val('f-company')) fields.push({ name: 'company', value: val('f-company') });
+      // Role is optional since R-079, so contact_type goes only when they pick one.
+      // The form accepts a blank, but a blank would overwrite a real value on the contact.
+      if (val('f-role')) fields.push({ name: 'contact_type', value: val('f-role') });
       if (val('f-phone')) fields.push({ name: 'phone', value: tel(val('f-phone')) });
       if (rep) fields.push({ name: 'source_rep', value: rep });
       // The event code comes from the link that brought them here, the same way

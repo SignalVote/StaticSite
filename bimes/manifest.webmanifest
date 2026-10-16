@@ -1,0 +1,13 @@
+{
+  "name": "Alex Bimes | A3Q",
+  "short_name": "Alex Bimes",
+  "start_url": "./",
+  "display": "browser",
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
