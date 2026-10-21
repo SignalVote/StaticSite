@@ -521,6 +521,11 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
       document.getElementById('donename').textContent = (first ? 'Thanks, ' + first + '. ' : 'Thanks. ') + "We'll be in touch.";
       form.hidden = true;
       document.getElementById('done').hidden = false;
+      // Put the button back. The form is hidden, so this is not visible now,
+      // but "Send another" reuses this same button and a half-reset one has
+      // already shipped once.
+      btn.disabled = false;
+      btn.textContent = 'Send';
     }
 
     document.getElementById('again').addEventListener('click', function () {
