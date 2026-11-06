@@ -217,8 +217,13 @@
   }
 
   function touch() {
-    if (urlTagged) return fromUrl;
     var s = stored();
+    // Per field, not all or nothing. A form page reached with a campaign but no
+    // medium (the card's own Send info link is one) used to return the whole of
+    // fromUrl and drop the stored channel, so a printed card's utm_medium=qr
+    // never reached HubSpot. The order documented at the top of this file is
+    // URL first, then a3q_touch, for each field on its own. R-272.
+    if (urlTagged) return { ev: fromUrl.ev || s.ev, ch: fromUrl.ch || s.ch, cp: fromUrl.cp || s.cp };
     var ev = '';
     try { if (window.vcAttribution) ev = validEv(window.vcAttribution.current().ev); } catch (e) {}
     return { ev: ev || s.ev, ch: s.ch, cp: s.cp };
@@ -366,8 +371,13 @@
   }
 
   function touch() {
-    if (urlTagged) return fromUrl;
     var s = stored();
+    // Per field, not all or nothing. A form page reached with a campaign but no
+    // medium (the card's own Send info link is one) used to return the whole of
+    // fromUrl and drop the stored channel, so a printed card's utm_medium=qr
+    // never reached HubSpot. The order documented at the top of this file is
+    // URL first, then a3q_touch, for each field on its own. R-272.
+    if (urlTagged) return { ev: fromUrl.ev || s.ev, ch: fromUrl.ch || s.ch, cp: fromUrl.cp || s.cp };
     var ev = '';
     try { if (window.vcAttribution) ev = validEv(window.vcAttribution.current().ev); } catch (e) {}
     return { ev: ev || s.ev, ch: s.ch, cp: s.cp };
