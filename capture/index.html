@@ -439,7 +439,11 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
       ? repName + ' will follow up.'
       : 'Someone from the A3Q team will follow up.';
     var back = document.getElementById('backLink');
-    if (by && repName) back.href = '/' + repName.split(' ')[0].toLowerCase() + '/';
+    // The card path is the rep's handle (D22), which is what `by` carries and
+    // what repNames is keyed on. This used to be built from the first name, so
+    // Stephanie Petelos's link resolved to /steph/, which is Steph Bilovsky's
+    // redirect, and would have 404'd once she was renamed. (R-297)
+    if (by && repName) back.href = '/' + by + '/';
 
     var form = document.getElementById('capform');
     var btn = document.getElementById('f-submit');
