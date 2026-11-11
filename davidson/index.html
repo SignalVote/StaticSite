@@ -149,10 +149,12 @@
  *   acquisition_event  utm_campaign, lowercased, only if it matches ev-####-xxxx
  *   source_channel     utm_medium, lowercased, only if it is on CHANNELS
  *   source_campaign    utm_campaign, lowercased, not validated (conventions v3)
+ *   source_platform    utm_source, lowercased, only if it is on PLATFORMS. The
+ *                      same check that keeps a platform out of source_rep
  *   ga_client_id       the _ga cookie, last two dot-separated parts
  *   test_record        "true" when the submitted email ends in @example.com
  *
- * Where event, channel and campaign come from, in order:
+ * Where event, channel, campaign and platform come from, in order:
  *   1. the form page's own URL, if it carries any of them (used as a set);
  *   2. otherwise the stored first arrival: the event from /attr.js
  *      (window.vcAttribution, VoteCivic and Veritas) when it has one, else
@@ -166,6 +168,13 @@
   // paid_social is the v3 spelling. paid-social stays so links already printed
   // or running in ads keep attributing.
   var CHANNELS = ['qr', 'email', 'social', 'paid_social', 'paid-social', 'cpc', 'display', 'sms', 'referral'];
+  // utm_source values that name a platform rather than a person. MUST STAY IN
+  // STEP with SOURCE_PLATFORMS in @shared/attribution.ts: that list decides a
+  // value is NOT a rep, this one writes the same value out. x and meta are
+  // legacy spellings on the HubSpot property and still write, so an old link
+  // keeps attributing; new links should carry twitter and facebook (R-311).
+  var PLATFORMS = ['facebook', 'instagram', 'linkedin', 'google', 'hubspot',
+    'branddeliver', 'bing', 'youtube', 'x', 'twitter', 'tiktok', 'reddit', 'meta'];
   var KEY = 'a3q_touch';
 
   function qp(k) {
@@ -176,12 +185,20 @@
   // Campaign names are free text by design: passed through lowercased, not
   // checked against a list.
   function cleanCp(v) { return String(v || '').trim().toLowerCase(); }
+  // Exact match, lowercase. The property is a single select, so anything else
+  // posts, returns 200 and is dropped from the contact.
+  function validPf(v) { v = String(v || '').toLowerCase(); return PLATFORMS.indexOf(v) !== -1 ? v : ''; }
 
-  var fromUrl = { ev: validEv(qp('utm_campaign')), ch: validCh(qp('utm_medium')), cp: cleanCp(qp('utm_campaign')) };
-  var urlTagged = !!(fromUrl.ev || fromUrl.ch || fromUrl.cp);
+  var fromUrl = {
+    ev: validEv(qp('utm_campaign')), ch: validCh(qp('utm_medium')),
+    cp: cleanCp(qp('utm_campaign')), pf: validPf(qp('utm_source')),
+  };
+  // A post shared with only utm_source counts as a tagged arrival now, so a
+  // click from a platform is recorded even without a medium or campaign.
+  var urlTagged = !!(fromUrl.ev || fromUrl.ch || fromUrl.cp || fromUrl.pf);
 
   var TTL = 30 * 60 * 1000; // GA4's session timeout
-  var EMPTY = { ev: '', ch: '', cp: '' };
+  var EMPTY = { ev: '', ch: '', cp: '', pf: '' };
 
   // The stored touch, or null if there is none or it has expired. An expired
   // one is removed so it cannot be read later.
@@ -190,11 +207,11 @@
       var o = JSON.parse(localStorage.getItem(KEY) || 'null');
       if (!o) return null;
       if (!(o.t > 0) || Date.now() - o.t > TTL) { localStorage.removeItem(KEY); return null; }
-      return { ev: validEv(o.ev), ch: validCh(o.ch), cp: cleanCp(o.cp) };
+      return { ev: validEv(o.ev), ch: validCh(o.ch), cp: cleanCp(o.cp), pf: validPf(o.pf) };
     } catch (e) { return null; }
   }
   function save(b) {
-    try { localStorage.setItem(KEY, JSON.stringify({ ev: b.ev, ch: b.ch, cp: b.cp, t: Date.now() })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ ev: b.ev, ch: b.ch, cp: b.cp, pf: b.pf, t: Date.now() })); } catch (e) {}
   }
 
   // Every page view: keep a live touch alive, or record the first tagged
@@ -225,10 +242,10 @@
     // fromUrl and drop the stored channel, so a printed card's utm_medium=qr
     // never reached HubSpot. The order documented at the top of this file is
     // URL first, then a3q_touch, for each field on its own. R-272.
-    if (urlTagged) return { ev: fromUrl.ev || s.ev, ch: fromUrl.ch || s.ch, cp: fromUrl.cp || s.cp };
+    if (urlTagged) return { ev: fromUrl.ev || s.ev, ch: fromUrl.ch || s.ch, cp: fromUrl.cp || s.cp, pf: fromUrl.pf || s.pf };
     var ev = '';
     try { if (window.vcAttribution) ev = validEv(window.vcAttribution.current().ev); } catch (e) {}
-    return { ev: ev || s.ev, ch: s.ch, cp: s.cp };
+    return { ev: ev || s.ev, ch: s.ch, cp: s.cp, pf: s.pf };
   }
 
   window.a3qFormFields = function (fields) {
@@ -237,6 +254,9 @@
     if (t.ev) out.push({ name: 'acquisition_event', value: t.ev });
     if (t.ch) out.push({ name: 'source_channel', value: t.ch });
     if (t.cp) out.push({ name: 'source_campaign', value: t.cp });
+    // The value the rep check already recognised as a platform, now written
+    // out too. source_rep still never receives it (D115, R-311).
+    if (t.pf) out.push({ name: 'source_platform', value: t.pf });
     var cid = gaClientId();
     if (cid) out.push({ name: 'ga_client_id', value: cid });
     var email = '';
