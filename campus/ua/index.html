@@ -481,25 +481,24 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
     var first = sp < 0 ? full : full.slice(0, sp);
     var last  = sp < 0 ? '' : full.slice(sp + 1);
 
-    // Role, group size and timing have no field on the HubSpot form, so they go
-    // into the message, labelled, ahead of what the person wrote. Department
-    // goes to company, so it is not repeated there, and the page is already
-    // in the HubSpot context as pageUri (R-323).
-    var lines = ['Reaching out as: ' + val('f-as')];
-    if (val('f-size')) lines.push('Approximate group size: ' + val('f-size'));
-    if (val('f-when')) lines.push('Rough timing: ' + val('f-when'));
-    lines.push('', val('f-msg'));
-
+    // Role, group size and timing have their own properties on form 360d7c90
+    // since R-323 part 2, so the message carries only what the person typed.
+    // Department goes to company; the page is already in the HubSpot context
+    // as pageUri. These three names must match CRM's spelling exactly, because
+    // HubSpot drops a field it does not recognise and still answers 200.
     var fields = [
       { name: 'firstname', value: first },
       { name: 'email', value: val('f-email') },
       { name: 'brands', value: 'a3q' },
       { name: 'contact_type', value: cfg.contactType },
       { name: 'program', value: cfg.program.value },
-      { name: 'message', value: lines.join('\n') },
+      { name: 'campus_role', value: val('f-as') },
+      { name: 'message', value: val('f-msg') },
     ];
     if (last) fields.push({ name: 'lastname', value: last });
     if (val('f-dept')) fields.push({ name: 'company', value: val('f-dept') });
+    if (val('f-size')) fields.push({ name: 'approximate_group_size', value: val('f-size') });
+    if (val('f-when')) fields.push({ name: 'rough_timing', value: val('f-when') });
 
     // Same attribution rules as every other form (rep, piece, event, path), read
     // off this page's own URL, then channel, campaign, GA client id, test_record
