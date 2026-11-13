@@ -482,12 +482,13 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
     var last  = sp < 0 ? '' : full.slice(sp + 1);
 
     // Role, group size and timing have no field on the HubSpot form, so they go
-    // into the message, labelled, ahead of what the person wrote.
+    // into the message, labelled, ahead of what the person wrote. Department
+    // goes to company, so it is not repeated there, and the page is already
+    // in the HubSpot context as pageUri (R-323).
     var lines = ['Reaching out as: ' + val('f-as')];
-    if (val('f-dept')) lines.push('Department or organization: ' + val('f-dept'));
     if (val('f-size')) lines.push('Approximate group size: ' + val('f-size'));
     if (val('f-when')) lines.push('Rough timing: ' + val('f-when'));
-    lines.push('Page: a3quumsolutions.com/campus/ua', '', val('f-msg'));
+    lines.push('', val('f-msg'));
 
     var fields = [
       { name: 'firstname', value: first },
@@ -522,6 +523,7 @@ const ATTRIBUTION_FIELDS = ["source_rep","source_piece","events_attended","acqui
       .then(function () {
         window.dataLayer = window.dataLayer || [];
         window.dataLayer.push({ event: 'contact_form_submit', form_source: 'campus_ua' });
+        btn.textContent = 'Sent';
         show('Thank you. Your note is on its way to Rashmee, and she will be in touch.');
       })
       .catch(function () {
