@@ -2,7 +2,7 @@
          an event code with them before anything else runs. --><script>window.a3qAttrRules = window.a3qAttrRules || (function () {
   var NAME = /^[a-z0-9_]+$/;
   var EVENT = /^ev-[0-9]{4}-[a-z]{4}$/;
-  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta"];
+  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta","a3q","newswire"];
   function rep(v) { v = String(v || ''); return NAME.test(v) && PLATFORMS.indexOf(v) === -1 ? v : ''; }
   function piece(v) { v = String(v || ''); return NAME.test(v) ? v : ''; }
   // Codes are lowercase; a printed EV-2610-PACS still counts.
@@ -174,7 +174,8 @@
   // legacy spellings on the HubSpot property and still write, so an old link
   // keeps attributing; new links should carry twitter and facebook (R-311).
   var PLATFORMS = ['facebook', 'instagram', 'linkedin', 'google', 'hubspot',
-    'branddeliver', 'bing', 'youtube', 'x', 'twitter', 'tiktok', 'reddit', 'meta'];
+    'branddeliver', 'bing', 'youtube', 'x', 'twitter', 'tiktok', 'reddit', 'meta',
+    'a3q', 'newswire'];
   var KEY = 'a3q_touch';
 
   function qp(k) {

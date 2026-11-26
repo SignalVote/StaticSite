@@ -2,7 +2,7 @@
          an event code with them before anything else runs. --><script>window.a3qAttrRules = window.a3qAttrRules || (function () {
   var NAME = /^[a-z0-9_]+$/;
   var EVENT = /^ev-[0-9]{4}-[a-z]{4}$/;
-  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta"];
+  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta","a3q","newswire"];
   function rep(v) { v = String(v || ''); return NAME.test(v) && PLATFORMS.indexOf(v) === -1 ? v : ''; }
   function piece(v) { v = String(v || ''); return NAME.test(v) ? v : ''; }
   // Codes are lowercase; a printed EV-2610-PACS still counts.
@@ -172,7 +172,8 @@
   // legacy spellings on the HubSpot property and still write, so an old link
   // keeps attributing; new links should carry twitter and facebook (R-311).
   var PLATFORMS = ['facebook', 'instagram', 'linkedin', 'google', 'hubspot',
-    'branddeliver', 'bing', 'youtube', 'x', 'twitter', 'tiktok', 'reddit', 'meta'];
+    'branddeliver', 'bing', 'youtube', 'x', 'twitter', 'tiktok', 'reddit', 'meta',
+    'a3q', 'newswire'];
   var KEY = 'a3q_touch';
 
   function qp(k) {
@@ -281,7 +282,7 @@
 </style></head> <body> <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5SG8HF32" height="0" width="0" style="display:none;visibility:hidden" title="Google Tag Manager"></iframe></noscript>  <main class="a3q-card"> <article class="panel"> <header class="top"> <img class="logo" src="/cards/a3q-logo.svg" alt="A3Q" width="2598" height="848"> <p class="mono">Send your info</p> </header> <section class="who"> <h1>Send<br><b>your info</b></h1> <p class="title" id="repline">Someone from the A3Q team will follow up.</p> </section> <form class="cap" id="capform" novalidate> <div class="two"> <label class="field"><span>First name *</span><input id="f-first" autocomplete="off" required></label> <label class="field"><span>Last name *</span><input id="f-last" autocomplete="off" required></label> </div> <label class="field"><span>Email *</span><input id="f-email" type="email" inputmode="email" autocomplete="off" required></label> <label class="field"><span>Phone</span><input id="f-phone" type="tel" inputmode="tel" autocomplete="off"></label> <label class="field"><span>Anything we should know</span><textarea id="f-notes" rows="3"></textarea></label> <label class="field"> <span>I am a</span> <select id="f-role"> <option value="" selected>Choose one</option> <option value="candidate">Candidate</option><option value="campaign_staff">Campaign staff</option><option value="consultant">Consultant</option><option value="org_lead">Organization leader</option><option value="vendor">Vendor or partner</option><option value="investor">Investor</option><option value="press">Press</option> </select> </label> <label class="hp" aria-hidden="true">Website <input id="f-website" tabindex="-1" autocomplete="off"></label> <p class="hint">* required</p> <p class="err" id="caperr" role="alert" hidden></p> <button class="btn btn-primary" id="f-submit" type="submit">Send</button> <p class="hint">We use this to reply and to follow up about A3Q. Unsubscribe or ask us to delete your information any time.</p> </form> <div class="done" id="done" role="status" hidden> <h2 id="donename">Thanks. We'll be in touch.</h2> <button class="btn btn-ghost" id="again" type="button">Send another</button> </div> <footer class="foot"> <a class="link" href="/" id="backLink">Back to the card</a> </footer> </article> </main>  </body></html>  <script>window.a3qAttrRules = window.a3qAttrRules || (function () {
   var NAME = /^[a-z0-9_]+$/;
   var EVENT = /^ev-[0-9]{4}-[a-z]{4}$/;
-  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta"];
+  var PLATFORMS = ["facebook","instagram","linkedin","google","hubspot","branddeliver","bing","youtube","x","twitter","tiktok","reddit","meta","a3q","newswire"];
   function rep(v) { v = String(v || ''); return NAME.test(v) && PLATFORMS.indexOf(v) === -1 ? v : ''; }
   function piece(v) { v = String(v || ''); return NAME.test(v) ? v : ''; }
   // Codes are lowercase; a printed EV-2610-PACS still counts.
@@ -346,7 +347,8 @@
   // legacy spellings on the HubSpot property and still write, so an old link
   // keeps attributing; new links should carry twitter and facebook (R-311).
   var PLATFORMS = ['facebook', 'instagram', 'linkedin', 'google', 'hubspot',
-    'branddeliver', 'bing', 'youtube', 'x', 'twitter', 'tiktok', 'reddit', 'meta'];
+    'branddeliver', 'bing', 'youtube', 'x', 'twitter', 'tiktok', 'reddit', 'meta',
+    'a3q', 'newswire'];
   var KEY = 'a3q_touch';
 
   function qp(k) {
